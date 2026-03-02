@@ -30,27 +30,10 @@ function Loader() {
 
 function MobileFallback() {
   return (
-    <div className="absolute inset-0 p-5">
-      <div className="glass-panel flex h-full flex-col rounded-[32px] border border-white/10 p-4">
-        <div className="mb-3 flex items-center gap-2">
-          <span className="size-3 rounded-full bg-[#ff5f57]" />
-          <span className="size-3 rounded-full bg-[#febc2e]" />
-          <span className="size-3 rounded-full bg-[#28c840]" />
-        </div>
-        <div className="flex-1 rounded-[24px] border border-white/8 bg-[#09101f] p-4 font-mono text-xs leading-6 text-slate-300">
-          <p className="text-cyan-300">const portfolio = {`{`}</p>
-          <p className="pl-4 text-slate-300">
-            name: <span className="text-amber-200">&quot;Simon&quot;</span>,
-          </p>
-          <p className="pl-4 text-slate-300">
-            role: <span className="text-amber-200">&quot;Front-end Engineer&quot;</span>,
-          </p>
-          <p className="pl-4 text-slate-300">
-            stack: <span className="text-amber-200">[&quot;Next.js&quot;, &quot;R3F&quot;, &quot;Motion&quot;]</span>
-          </p>
-          <p className="text-cyan-300">{`}`}</p>
-        </div>
-      </div>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[36px]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.12),transparent_36%)]" />
+      <div className="absolute -left-12 top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-[80px]" />
+      <div className="absolute bottom-12 right-0 h-48 w-48 rounded-full bg-sky-400/10 blur-[90px]" />
     </div>
   );
 }
@@ -58,7 +41,6 @@ function MobileFallback() {
 export function SceneCanvas() {
   const { progress, offset } = useScrollRig();
   const reducedMotion = useReducedMotion();
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -82,23 +64,14 @@ export function SceneCanvas() {
   }
 
   return (
-    <div
-      className="absolute inset-0"
-      onPointerMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-        setPointer({ x, y });
-      }}
-      onPointerLeave={() => setPointer({ x: 0, y: 0 })}
-    >
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[36px]">
       <Suspense fallback={<Loader />}>
         <Canvas dpr={[1, 2]} gl={{ antialias: true, alpha: true }} shadows={false}>
-          <PerspectiveCamera makeDefault position={[0, 0.15, 5.8]} fov={34} />
+          <PerspectiveCamera makeDefault position={[0, 0.1, 5.6]} fov={36} />
           <ambientLight intensity={0.7} />
           <directionalLight position={[3, 4, 4]} intensity={1.2} color="#dbeafe" />
           <directionalLight position={[-4, -2, 1]} intensity={0.35} color="#7dd3fc" />
-          <FloatingIDE progress={progress} offset={offset} reducedMotion={Boolean(reducedMotion)} pointer={pointer} />
+          <FloatingIDE progress={progress} offset={offset} reducedMotion={Boolean(reducedMotion)} />
         </Canvas>
       </Suspense>
     </div>

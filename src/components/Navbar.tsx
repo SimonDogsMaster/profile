@@ -60,7 +60,7 @@ export function Navbar({
             {siteContent.name}
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -72,7 +72,7 @@ export function Navbar({
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-2 lg:flex xl:gap-3">
             <ThemeToggle theme={theme} onToggle={onToggleTheme} />
             <button
               type="button"
@@ -91,7 +91,7 @@ export function Navbar({
             type="button"
             onClick={() => setMobileOpen((value) => !value)}
             aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-            className="theme-chip theme-border theme-muted inline-flex rounded-full border p-2 md:hidden"
+            className="theme-chip theme-border theme-muted inline-flex rounded-full border p-2 lg:hidden"
           >
             {mobileOpen ? (
               <X className="size-5" />
@@ -107,7 +107,7 @@ export function Navbar({
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="glass-panel theme-border mt-3 rounded-[28px] border p-3 md:hidden"
+              className="glass-panel theme-border mt-3 rounded-[28px] border p-3 lg:hidden"
             >
               <div className="mb-2 flex items-center justify-between px-1">
                 <span className="theme-muted text-xs uppercase tracking-[0.2em]">

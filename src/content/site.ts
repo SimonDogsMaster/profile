@@ -10,12 +10,12 @@ import {
 } from "lucide-react";
 
 export const siteContent = {
-  name: "Simon S.",
+  name: "Simon Riverman",
   role: "Front-end Engineer / Motion Designer",
-  tagline: "I build tactile interfaces where code, motion, and 3D space feel like one system.",
+  tagline: "I design and build polished web experiences where engineering precision and motion direction work as one system.",
   location: "Bangkok, Thailand",
-  email: "hello@simon.dev",
-  availability: "Available for select freelance and product collaborations in 2026.",
+  email: "simon.r1verman@gmail.com",
+  availability: "Available for freelance product work, launch sites, and front-end collaborations.",
   heroStats: [
     { label: "Years crafting interfaces", value: "7+" },
     { label: "Shipped products", value: "24" },
@@ -23,15 +23,15 @@ export const siteContent = {
   ],
   about: {
     intro:
-      "I design and engineer premium web experiences with a product mindset. My focus is clarity, motion, and building interfaces that feel alive without becoming noisy.",
+      "I build premium interfaces for products and brands that need more than clean implementation. My focus is structure, motion, and making the final experience feel intentional at every breakpoint.",
     body: [
-      "My work sits between front-end architecture and visual storytelling, from design systems and immersive landing pages to full-scale product surfaces.",
-      "I care about performance, restraint, and making complex interactions feel obvious on the first scroll."
+      "My work sits between front-end architecture and visual storytelling, from design systems and product surfaces to launch pages that need a stronger sense of atmosphere.",
+      "I care about performance, restraint, and interactions that feel confident rather than overloaded."
     ],
     highlights: [
-      "Own the bridge between design exploration and production UI.",
-      "Build motion systems that support hierarchy, not decoration.",
-      "Ship responsive experiences that keep their edge on mobile."
+      "Translate design intent into production-ready UI without losing detail.",
+      "Build motion systems that support hierarchy instead of decoration.",
+      "Ship responsive experiences that still feel sharp on tablet and mobile."
     ]
   },
   skills: [
@@ -54,14 +54,14 @@ export const siteContent = {
       title: "Signal OS",
       eyebrow: "Product Platform",
       description:
-        "A modular analytics workspace for product teams, combining real-time monitoring, onboarding funnels, and collaborative insights in one visual system.",
+        "A modular analytics workspace for product teams, combining monitoring, onboarding funnels, and collaborative insights in a single interface system.",
       longDescription:
-        "I led the front-end architecture and motion language for the platform redesign. The result was a faster dashboard shell, higher perceived polish, and a component system used across growth, billing, and reporting surfaces.",
+        "I led the front-end architecture and motion language for the platform redesign. The result was a faster dashboard shell, stronger perceived polish, and a component system used across growth, billing, and reporting surfaces.",
       tags: ["Next.js", "TypeScript", "Motion", "Dashboard"],
       metrics: ["-31% bundle cost", "+18% trial activation", "95 Lighthouse"],
       links: [
-        { label: "Live Preview", href: "#" },
-        { label: "Case Study", href: "#" }
+        { label: "Repository", href: "https://gitlab.com/simonr1verman/simon-s" },
+        { label: "Contact About This Work", href: "mailto:simon.r1verman@gmail.com?subject=Signal%20OS%20Case%20Study" }
       ]
     },
     {
@@ -69,14 +69,14 @@ export const siteContent = {
       title: "Helium Commerce",
       eyebrow: "Immersive Launch",
       description:
-        "A premium commerce launch site with immersive product reveals, editorial pacing, and a scroll system tuned for storytelling without losing speed.",
+        "A premium commerce launch site with editorial pacing, layered product reveals, and a scroll system tuned for storytelling without losing speed.",
       longDescription:
-        "The site used layered depth, subtle WebGL accents, and a lightweight motion system to support a major launch. The focus was premium feel with strict performance budgets across regions and devices.",
+        "The site used layered depth, subtle visual accents, and a lightweight motion system to support a major launch. The focus was premium feel with strict performance budgets across regions and devices.",
       tags: ["R3F", "Framer Motion", "Tailwind", "Storytelling"],
       metrics: ["2.4s LCP", "60fps mobile hero", "+23% conversion"],
       links: [
-        { label: "Launch Site", href: "#" },
-        { label: "Technical Notes", href: "#" }
+        { label: "GitHub Profile", href: "https://github.com/simonr1verman" },
+        { label: "Request Walkthrough", href: "mailto:simon.r1verman@gmail.com?subject=Helium%20Commerce%20Walkthrough" }
       ]
     },
     {
@@ -84,14 +84,14 @@ export const siteContent = {
       title: "Atlas Labs",
       eyebrow: "Developer Experience",
       description:
-        "A developer-first docs and sandbox hub that turns complex APIs into guided, interactive learning flows with strong navigation and fast search.",
+        "A developer-first docs and sandbox hub that turns complex APIs into guided learning flows with stronger navigation and faster search.",
       longDescription:
-        "I rebuilt the information architecture, page templates, and code interaction layer to reduce cognitive load. The system improved doc discoverability and made product adoption more self-serve.",
+        "I rebuilt the information architecture, page templates, and code interaction layer to reduce cognitive load. The system improved discoverability and made product adoption more self-serve.",
       tags: ["Docs", "Search UX", "MDX", "Developer Tools"],
       metrics: ["-42% bounce", "+29% docs completion", "AA compliant"],
       links: [
-        { label: "Docs Hub", href: "#" },
-        { label: "Architecture", href: "#" }
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/simonr1verman/" },
+        { label: "Discuss Project", href: "mailto:simon.r1verman@gmail.com?subject=Atlas%20Labs%20Project" }
       ]
     }
   ],
@@ -99,24 +99,24 @@ export const siteContent = {
     {
       year: "2026",
       title: "Senior Front-end Engineer, Independent",
-      summary: "Designing premium launch experiences and product surfaces for founders, studios, and SaaS teams."
+      summary: "Designing premium launch experiences, marketing sites, and product surfaces for founders, studios, and SaaS teams."
     },
     {
       year: "2024",
       title: "Lead UI Engineer, Signal OS",
-      summary: "Scaled the design system, led dashboard rebuilds, and shipped motion guidelines across the platform."
+      summary: "Scaled the design system, led dashboard rebuilds, and shipped a motion language across the platform."
     },
     {
       year: "2022",
       title: "Creative Developer, Studio Practice",
-      summary: "Built interactive marketing sites, editorial experiences, and experimental prototypes for global brands."
+      summary: "Built interactive marketing sites, editorial experiences, and prototypes for brands that needed stronger visual direction."
     }
   ],
   socials: [
-    { label: "GitHub", href: "https://github.com/", icon: Code2 },
-    { label: "LinkedIn", href: "https://www.linkedin.com/", icon: BriefcaseBusiness },
+    { label: "GitHub", href: "https://github.com/simonr1verman", icon: Code2 },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/simonr1verman/", icon: BriefcaseBusiness },
     { label: "Dribbble", href: "https://dribbble.com/", icon: Sparkles },
-    { label: "Email", href: "mailto:hello@simon.dev", icon: ArrowUpRight }
+    { label: "Email", href: "mailto:simon.r1verman@gmail.com", icon: ArrowUpRight }
   ],
   commandMenu: [
     { id: "hero", label: "Jump to Hero", href: "#hero", icon: Rocket },

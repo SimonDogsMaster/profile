@@ -5,8 +5,7 @@ import { ArrowRight, Command } from "lucide-react";
 
 import { siteContent } from "@/content/site";
 
-import { CodeEditorPanel } from "./CodeEditorPanel";
-import { SceneCanvas } from "./three/SceneCanvas";
+import { CodeTabs } from "./CodeTabs";
 import { Button } from "./ui/Button";
 import { Container } from "./ui/Container";
 
@@ -24,14 +23,14 @@ export function Hero({ onOpenCommand }: { onOpenCommand: () => void }) {
       </div>
 
       <Container className="relative">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="grid items-center gap-12 lg:gap-12 xl:grid-cols-[0.82fr_1.18fr] xl:gap-8">
           <motion.div
             initial={reduceMotion ? undefined : { opacity: 0, y: 18 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="relative z-10"
+            className="relative z-10 lg:max-w-[42rem]"
           >
-            <h1 className="theme-text mt-6 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-7xl">
+            <h1 className="theme-text mt-6 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-[4.8rem] xl:text-7xl">
               Interfaces with{" "}
               <span className="text-gradient">technical depth</span> and
               cinematic calm.
@@ -74,11 +73,10 @@ export function Hero({ onOpenCommand }: { onOpenCommand: () => void }) {
             </div>
           </motion.div>
 
-          <div className="relative h-[480px] overflow-hidden rounded-[36px] lg:h-[620px]">
-            <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/4" />
-            <div className="absolute inset-0 rounded-[36px] bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.16),transparent_38%)]" />
-            <CodeEditorPanel />
-            <SceneCanvas />
+          <div className="relative mx-auto w-full max-w-[860px] min-h-[420px] lg:min-h-[500px] xl:min-h-[620px]">
+            <div className="relative z-10 flex min-h-[420px] items-center justify-center px-2 py-3 sm:px-4 lg:min-h-[500px] lg:px-0 xl:min-h-[620px] xl:justify-end xl:pl-6 xl:pr-0">
+              <CodeTabs />
+            </div>
           </div>
         </div>
       </Container>

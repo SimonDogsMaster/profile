@@ -9,6 +9,7 @@ import { type Project, siteContent } from "@/content/site";
 
 import { Card } from "../ui/Card";
 import { Container } from "../ui/Container";
+import { sectionHeadingMotion, sectionItemMotion } from "./sectionMotion";
 
 export function ProjectsSection() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -16,7 +17,10 @@ export function ProjectsSection() {
   return (
     <section id="projects" className="relative py-24 sm:py-28">
       <Container>
-        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <motion.div
+          className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+          {...sectionHeadingMotion}
+        >
           <div className="max-w-2xl">
             <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">Projects</p>
             <h2 className="theme-text text-3xl font-semibold tracking-tight sm:text-5xl">
@@ -27,16 +31,17 @@ export function ProjectsSection() {
             Each card opens a richer project view with metrics, stack, and links. The motion stays light,
             but the hierarchy is intentional.
           </p>
-        </div>
+        </motion.div>
 
         <LayoutGroup>
           <div className="grid gap-5 lg:grid-cols-3">
-            {siteContent.projects.map((project) => (
+            {siteContent.projects.map((project, index) => (
               <motion.button
                 key={project.slug}
                 layoutId={`project-card-${project.slug}`}
                 onClick={() => setActiveProject(project)}
                 className="group text-left"
+                {...sectionItemMotion(index)}
               >
                 <Card className="theme-border h-full rounded-[30px] p-6 transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-300/30 group-hover:shadow-[0_24px_64px_rgba(56,189,248,0.12)]">
                   <p className="text-xs uppercase tracking-[0.22em] text-[var(--subtle-text)]">{project.eyebrow}</p>
