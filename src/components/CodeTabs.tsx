@@ -1,6 +1,11 @@
 "use client";
 
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
 type Token = {
@@ -22,6 +27,7 @@ type CodeFile = {
   footer: string;
   label: string;
   lines: CodeLine[];
+  statusMeta?: string;
 };
 
 type RenderedLine = {
@@ -36,17 +42,18 @@ const files: CodeFile[] = [
       lineEnd: 220,
       punctuation: 70,
       reset: 1250,
-      closing: 110
+      closing: 110,
     },
     label: "App.tsx",
     footer: "TypeScript React UTF-8",
+    statusMeta: "Spaces: 2",
     lines: [
       [
         { text: "import", color: "#c792ea" },
         { text: " React", color: "#d6deeb" },
         { text: " from", color: "#c792ea" },
         { text: " ", color: "#d6deeb" },
-        { text: "\"react\"", color: "#a5d6ff" }
+        { text: '"react"', color: "#a5d6ff" },
       ],
       [
         { text: "import", color: "#c792ea" },
@@ -55,15 +62,16 @@ const files: CodeFile[] = [
         { text: " }", color: "#d6deeb" },
         { text: " from", color: "#c792ea" },
         { text: " ", color: "#d6deeb" },
-        { text: "\"framer-motion\"", color: "#98d68b" }
+        { text: '"framer-motion"', color: "#98d68b" },
       ],
+      [],
       [
         { text: "export", color: "#c792ea" },
         { text: " default", color: "#c792ea" },
         { text: " function", color: "#c792ea" },
         { text: " App", color: "#5fb0ff" },
         { text: "()", color: "#d6deeb" },
-        { text: " {", color: "#d6deeb" }
+        { text: " {", color: "#d6deeb" },
       ],
       [
         { text: "  const", color: "#c792ea" },
@@ -76,72 +84,68 @@ const files: CodeFile[] = [
         { text: "useState", color: "#5fb0ff" },
         { text: "(", color: "#d6deeb" },
         { text: "0", color: "#f6c177" },
-        { text: ")", color: "#d6deeb" }
+        { text: ")", color: "#d6deeb" },
       ],
       [
         { text: "  return", color: "#c792ea" },
-        { text: " (", color: "#d6deeb" }
+        { text: " (", color: "#d6deeb" },
       ],
       [
         { text: "    <", color: "#d6deeb" },
         { text: "motion.div", color: "#ff7a7a" },
-        { text: " ", color: "#d6deeb" },
-        { text: "animate", color: "#f6c177" },
+        { text: " animate", color: "#f6c177" },
         { text: "={{ ", color: "#d6deeb" },
         { text: "scale", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
         { text: "1.1", color: "#f6c177" },
-        { text: " }}>", color: "#d6deeb" }
+        { text: " }}>", color: "#d6deeb" },
       ],
       [
         { text: "      <", color: "#d6deeb" },
         { text: "h1", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
-        { text: "Simon crafts premium front-end systems.", color: "#c9d1e7" },
+        { text: "Simon builds premium interfaces.", color: "#c9d1e7" },
         { text: " <", color: "#d6deeb" },
         { text: "/h1", color: "#ff7a7a" },
-        { text: ">", color: "#d6deeb" }
+        { text: ">", color: "#d6deeb" },
       ],
       [
         { text: "      <", color: "#d6deeb" },
         { text: "p", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
-        { text: "Bangkok-based UI and motion design for modern products.", color: "#8fa1c7" },
+        { text: "UI + motion for modern products.", color: "#8fa1c7" },
         { text: " <", color: "#d6deeb" },
         { text: "/p", color: "#ff7a7a" },
-        { text: ">", color: "#d6deeb" }
+        { text: ">", color: "#d6deeb" },
       ],
       [
         { text: "      <", color: "#d6deeb" },
         { text: "button", color: "#ff7a7a" },
-        { text: " ", color: "#d6deeb" },
         { text: "onClick", color: "#f6c177" },
         { text: "={() => ", color: "#d6deeb" },
         { text: "setCount", color: "#5fb0ff" },
-        { text: "(c => c + ", color: "#d6deeb" },
+        { text: "((c) => c + ", color: "#d6deeb" },
         { text: "1", color: "#f6c177" },
-        { text: ")}>", color: "#d6deeb" }
+        { text: ")}>", color: "#d6deeb" },
       ],
       [
         { text: "        Clicked: ", color: "#c9d1e7" },
         { text: "{count}", color: "#ff7a7a" },
-        { text: " launch states", color: "#c9d1e7" }
+        { text: " launch states", color: "#c9d1e7" },
       ],
       [
         { text: "      <", color: "#d6deeb" },
         { text: "/button", color: "#ff7a7a" },
-        { text: ">", color: "#d6deeb" }
+        { text: ">", color: "#d6deeb" },
       ],
       [
         { text: "    <", color: "#d6deeb" },
         { text: "/motion.div", color: "#ff7a7a" },
-        { text: ">", color: "#d6deeb" }
+        { text: ">", color: "#d6deeb" },
       ],
-      [
-        { text: "  )", color: "#d6deeb" }
-      ],
-      [{ text: "}", color: "#d6deeb" }]
-    ]
+      [{ text: "  )", color: "#d6deeb" }],
+      [{ text: "}", color: "#d6deeb" }],
+    ],
   },
   {
     cadence: {
@@ -150,10 +154,11 @@ const files: CodeFile[] = [
       lineEnd: 185,
       punctuation: 62,
       reset: 950,
-      closing: 92
+      closing: 92,
     },
     label: "api/route.ts",
     footer: "Route Handler JSON",
+    statusMeta: "Spaces: 2",
     lines: [
       [
         { text: "import", color: "#c792ea" },
@@ -162,7 +167,7 @@ const files: CodeFile[] = [
         { text: " }", color: "#d6deeb" },
         { text: " from", color: "#c792ea" },
         { text: " ", color: "#d6deeb" },
-        { text: "\"next/server\"", color: "#98d68b" }
+        { text: '"next/server"', color: "#98d68b" },
       ],
       [],
       [
@@ -171,7 +176,7 @@ const files: CodeFile[] = [
         { text: " function", color: "#c792ea" },
         { text: " GET", color: "#5fb0ff" },
         { text: "()", color: "#d6deeb" },
-        { text: " {", color: "#d6deeb" }
+        { text: " {", color: "#d6deeb" },
       ],
       [
         { text: "  return", color: "#c792ea" },
@@ -179,45 +184,43 @@ const files: CodeFile[] = [
         { text: "NextResponse", color: "#5fb0ff" },
         { text: ".", color: "#d6deeb" },
         { text: "json", color: "#f6c177" },
-        { text: "({", color: "#d6deeb" }
+        { text: "({", color: "#d6deeb" },
       ],
       [
         { text: "    name", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
-        { text: "\"Simon\"", color: "#98d68b" },
-        { text: ",", color: "#d6deeb" }
+        { text: '"Simon"', color: "#98d68b" },
+        { text: ",", color: "#d6deeb" },
       ],
       [
         { text: "    status", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
-        { text: "\"online\"", color: "#98d68b" },
-        { text: ",", color: "#d6deeb" }
+        { text: '"online"', color: "#98d68b" },
+        { text: ",", color: "#d6deeb" },
       ],
       [
         { text: "    uptime", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
         { text: "99.98", color: "#f6c177" },
-        { text: ",", color: "#d6deeb" }
+        { text: ",", color: "#d6deeb" },
       ],
       [
         { text: "    region", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
-        { text: "\"bkk1\"", color: "#98d68b" },
-        { text: ",", color: "#d6deeb" }
+        { text: '"bkk1"', color: "#98d68b" },
+        { text: ",", color: "#d6deeb" },
       ],
       [
         { text: "    focus", color: "#ff7a7a" },
         { text: ": ", color: "#d6deeb" },
-        { text: "\"frontend + motion\"", color: "#98d68b" }
+        { text: '"frontend + motion"', color: "#98d68b" },
       ],
-      [
-        { text: "  })", color: "#d6deeb" }
-      ],
+      [{ text: "  });", color: "#d6deeb" }],
       [{ text: "}", color: "#d6deeb" }],
       [],
       [],
-      []
-    ]
+      [],
+    ],
   },
   {
     cadence: {
@@ -226,11 +229,22 @@ const files: CodeFile[] = [
       lineEnd: 260,
       punctuation: 86,
       reset: 1450,
-      closing: 130
+      closing: 130,
     },
     label: "schema.ts",
     footer: "Schema Definition TS",
+    statusMeta: "Spaces: 2",
     lines: [
+      [
+        { text: "import", color: "#c792ea" },
+        { text: " { ", color: "#d6deeb" },
+        { text: "z", color: "#5fb0ff" },
+        { text: " }", color: "#d6deeb" },
+        { text: " from", color: "#c792ea" },
+        { text: " ", color: "#d6deeb" },
+        { text: '"zod"', color: "#98d68b" },
+      ],
+      [],
       [
         { text: "export", color: "#c792ea" },
         { text: " const", color: "#c792ea" },
@@ -239,7 +253,7 @@ const files: CodeFile[] = [
         { text: "z", color: "#5fb0ff" },
         { text: ".", color: "#d6deeb" },
         { text: "object", color: "#f6c177" },
-        { text: "({", color: "#d6deeb" }
+        { text: "({", color: "#d6deeb" },
       ],
       [
         { text: "  title", color: "#ff7a7a" },
@@ -252,7 +266,7 @@ const files: CodeFile[] = [
         { text: "min", color: "#f6c177" },
         { text: "(", color: "#d6deeb" },
         { text: "2", color: "#f6c177" },
-        { text: "),", color: "#d6deeb" }
+        { text: "),", color: "#d6deeb" },
       ],
       [
         { text: "  slug", color: "#ff7a7a" },
@@ -265,7 +279,7 @@ const files: CodeFile[] = [
         { text: "regex", color: "#f6c177" },
         { text: "(", color: "#d6deeb" },
         { text: "/^[a-z-]+$/", color: "#98d68b" },
-        { text: ")", color: "#d6deeb" }
+        { text: ")", color: "#d6deeb" },
       ],
       [
         { text: "  featured", color: "#ff7a7a" },
@@ -278,7 +292,7 @@ const files: CodeFile[] = [
         { text: "default", color: "#f6c177" },
         { text: "(", color: "#d6deeb" },
         { text: "false", color: "#f6c177" },
-        { text: ")", color: "#d6deeb" }
+        { text: ")", color: "#d6deeb" },
       ],
       [
         { text: "  theme", color: "#ff7a7a" },
@@ -287,29 +301,31 @@ const files: CodeFile[] = [
         { text: ".", color: "#d6deeb" },
         { text: "enum", color: "#f6c177" },
         { text: "([", color: "#d6deeb" },
-        { text: "\"dark\"", color: "#98d68b" },
+        { text: '"dark"', color: "#98d68b" },
         { text: ", ", color: "#d6deeb" },
-        { text: "\"light\"", color: "#98d68b" },
-        { text: "])", color: "#d6deeb" }
+        { text: '"light"', color: "#98d68b" },
+        { text: "])", color: "#d6deeb" },
       ],
-      [{ text: "})", color: "#d6deeb" }],
+      [{ text: "});", color: "#d6deeb" }],
       [],
       [],
-      []
-    ]
-  }
+      [],
+    ],
+  },
 ];
-
-const EDITOR_ROWS = 15;
 
 function useTypingCode(file: CodeFile) {
   const reduceMotion = useReducedMotion();
   const linesSource = file.lines;
   const totalCharacters = useMemo(
-    () => linesSource.flatMap((line) => line.map((token) => token.text)).join("").length,
-    [linesSource]
+    () =>
+      linesSource.flatMap((line) => line.map((token) => token.text)).join("")
+        .length,
+    [linesSource],
   );
-  const [visibleCharacters, setVisibleCharacters] = useState(reduceMotion ? totalCharacters : 0);
+  const [visibleCharacters, setVisibleCharacters] = useState(
+    reduceMotion ? totalCharacters : 0,
+  );
   const [cursorVisible, setCursorVisible] = useState(true);
 
   useEffect(() => {
@@ -326,7 +342,9 @@ function useTypingCode(file: CodeFile) {
       setCursorVisible((value) => !value);
     }, 560);
 
-    const lineLengths = linesSource.map((line) => line.reduce((sum, token) => sum + token.text.length, 0));
+    const lineLengths = linesSource.map((line) =>
+      line.reduce((sum, token) => sum + token.text.length, 0),
+    );
     let runningTotal = 0;
     let currentLineIndex = 0;
 
@@ -342,10 +360,20 @@ function useTypingCode(file: CodeFile) {
     const previousLinesTotal =
       currentLineIndex === 0
         ? 0
-        : lineLengths.slice(0, currentLineIndex).reduce((sum, length) => sum + length, 0);
-    const columnWithinLine = Math.max(0, visibleCharacters - previousLinesTotal);
-    const currentLineChars = linesSource[currentLineIndex]?.flatMap((token) => token.text.split("")) ?? [];
-    const nextChar = currentLineChars[Math.min(columnWithinLine, Math.max(currentLineChars.length - 1, 0))];
+        : lineLengths
+            .slice(0, currentLineIndex)
+            .reduce((sum, length) => sum + length, 0);
+    const columnWithinLine = Math.max(
+      0,
+      visibleCharacters - previousLinesTotal,
+    );
+    const currentLineChars =
+      linesSource[currentLineIndex]?.flatMap((token) => token.text.split("")) ??
+      [];
+    const nextChar =
+      currentLineChars[
+        Math.min(columnWithinLine, Math.max(currentLineChars.length - 1, 0))
+      ];
 
     let delay = file.cadence.base;
 
@@ -371,13 +399,24 @@ function useTypingCode(file: CodeFile) {
       window.clearTimeout(typingTimeout);
       window.clearInterval(cursorInterval);
     };
-  }, [file.cadence.base, file.cadence.closing, file.cadence.lineEnd, file.cadence.lineStart, file.cadence.punctuation, file.cadence.reset, linesSource, reduceMotion, totalCharacters, visibleCharacters]);
+  }, [
+    file.cadence.base,
+    file.cadence.closing,
+    file.cadence.lineEnd,
+    file.cadence.lineStart,
+    file.cadence.punctuation,
+    file.cadence.reset,
+    linesSource,
+    reduceMotion,
+    totalCharacters,
+    visibleCharacters,
+  ]);
 
   const computed = useMemo(() => {
     let remaining = visibleCharacters;
 
     const lineLengths = linesSource.map((line) =>
-      line.reduce((sum, token) => sum + token.text.length, 0)
+      line.reduce((sum, token) => sum + token.text.length, 0),
     );
 
     let activeLine = 0;
@@ -415,13 +454,7 @@ function useTypingCode(file: CodeFile) {
       return { renderedTokens };
     });
 
-    const paddedLines = [...lines];
-
-    while (paddedLines.length < EDITOR_ROWS) {
-      paddedLines.push({ renderedTokens: [] });
-    }
-
-    return { activeLine, cursorColumn, lines: paddedLines };
+    return { activeLine, cursorColumn, lines };
   }, [linesSource, totalCharacters, visibleCharacters]);
 
   return {
@@ -429,7 +462,7 @@ function useTypingCode(file: CodeFile) {
     cursorColumn: computed.cursorColumn,
     cursorVisible,
     isComplete: visibleCharacters >= totalCharacters,
-    lines: computed.lines
+    lines: computed.lines,
   };
 }
 
@@ -437,7 +470,8 @@ export function CodeTabs() {
   const reduceMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState(0);
   const activeFile = files[activeTab];
-  const { activeLine, cursorColumn, cursorVisible, isComplete, lines } = useTypingCode(activeFile);
+  const { activeLine, cursorColumn, cursorVisible, isComplete, lines } =
+    useTypingCode(activeFile);
 
   useEffect(() => {
     if (reduceMotion || !isComplete) {
@@ -484,13 +518,21 @@ export function CodeTabs() {
                       <motion.span
                         layoutId="active-code-tab"
                         className="absolute inset-0 rounded-t-2xl border border-b-0 border-cyan-300/18 bg-[#182042]"
-                        transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 360,
+                          damping: 30,
+                        }}
                       />
                     ) : null}
                     {!active ? (
                       <span className="absolute inset-x-2 bottom-0 h-px bg-transparent transition duration-200 group-hover:bg-cyan-300/20" />
                     ) : null}
-                    <span className={`relative z-10 ${active ? "text-[#dce6ff]" : ""}`}>{file.label}</span>
+                    <span
+                      className={`relative z-10 ${active ? "text-[#dce6ff]" : ""}`}
+                    >
+                      {file.label}
+                    </span>
                   </button>
                 );
               })}
@@ -503,13 +545,25 @@ export function CodeTabs() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFile.label}
-                initial={reduceMotion ? undefined : { opacity: 0, y: 10, filter: "blur(4px)" }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -10, filter: "blur(4px)" }}
+                initial={
+                  reduceMotion
+                    ? undefined
+                    : { opacity: 0, y: 10, filter: "blur(4px)" }
+                }
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : { opacity: 1, y: 0, filter: "blur(0px)" }
+                }
+                exit={
+                  reduceMotion
+                    ? undefined
+                    : { opacity: 0, y: -10, filter: "blur(4px)" }
+                }
                 transition={{ duration: 0.24, ease: "easeOut" }}
                 className="min-w-[560px]"
               >
-                <div className="grid min-h-[430px] grid-cols-[56px_1fr] font-mono text-[13px] leading-7 sm:grid-cols-[68px_1fr] sm:text-[14px] sm:leading-8 xl:min-h-[500px] xl:text-[15px] xl:leading-9">
+                <div className="grid grid-cols-[56px_1fr] font-mono text-[13px] leading-7 sm:grid-cols-[68px_1fr] sm:text-[14px] sm:leading-8 xl:text-[15px] xl:leading-9">
                   <div className="border-r border-white/5 bg-white/[0.025] px-3 py-5 text-right text-[#55627f] sm:px-4 sm:py-6">
                     {lines.map((_, index) => (
                       <div
@@ -521,19 +575,24 @@ export function CodeTabs() {
                     ))}
                   </div>
 
-                  <div className="px-4 py-5 sm:px-5 sm:py-6">
+                  <div className="relative px-4 py-5 sm:px-5 sm:py-6">
                     {lines.map((line, lineIndex) => (
                       <div
                         key={lineIndex}
                         className={
                           lineIndex === activeLine
-                            ? "rounded-sm bg-cyan-300/[0.07] shadow-[inset_0_0_0_1px_rgba(125,211,252,0.02)]"
-                            : ""
+                            ? "relative whitespace-pre rounded-sm bg-cyan-300/[0.07] shadow-[inset_0_0_0_1px_rgba(125,211,252,0.02)]"
+                            : "relative whitespace-pre"
                         }
                       >
-                        {line.renderedTokens.length === 0 ? <span>&nbsp;</span> : null}
+                        {line.renderedTokens.length === 0 ? (
+                          <span>&nbsp;</span>
+                        ) : null}
                         {line.renderedTokens.map((token, tokenIndex) => (
-                          <span key={`${lineIndex}-${tokenIndex}`} style={{ color: token.color }}>
+                          <span
+                            key={`${lineIndex}-${tokenIndex}`}
+                            style={{ color: token.color }}
+                          >
                             {token.visibleText}
                           </span>
                         ))}
@@ -549,7 +608,10 @@ export function CodeTabs() {
           </div>
 
           <div className="flex items-center justify-between border-t border-white/8 bg-[#0d1328]/96 px-4 py-3 font-mono text-[11px] text-[#7381a8] sm:px-6 sm:text-[12px]">
-            <span className="text-[#9ddc8a]">{`Ln ${activeLine + 1}, Col ${cursorColumn}`}</span>
+            <div className="flex items-center gap-4">
+              <span className="text-[#9ddc8a]">{`Ln ${activeLine + 1}, Col ${cursorColumn}`}</span>
+              <span>{activeFile.statusMeta ?? "Spaces: 2"}</span>
+            </div>
             <span>{activeFile.footer}</span>
           </div>
         </div>
