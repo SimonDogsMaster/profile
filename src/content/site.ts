@@ -39,6 +39,16 @@ export const siteContent = {
       "Ship responsive experiences that still feel sharp on tablet and mobile."
     ]
   },
+  motionDNA: {
+    eyebrow: "Code to Interface",
+    title: "Systems shaped through code, layout, and motion.",
+    body:
+      "This signature element represents how I approach front-end work: code structures becoming interface, motion reinforcing hierarchy, and every layer working together as one system. The goal is clarity you can feel before you name it.",
+    notes: [
+      "Code, layout, and motion treated as a single design surface.",
+      "Built to make interfaces feel more legible, responsive, and alive."
+    ]
+  },
   skills: [
     {
       title: "Interface Engineering",
@@ -156,6 +166,7 @@ export const siteContent = {
     { id: "hero", label: "Jump to Hero", href: "#hero", icon: Rocket },
     { id: "availability", label: "Open Availability", href: "#availability", icon: Sparkles },
     { id: "about", label: "Open About", href: "#about", icon: Globe },
+    { id: "motion-dna", label: "Open Motion DNA", href: "#motion-dna", icon: Sparkles },
     { id: "skills", label: "See Skills", href: "#skills", icon: Layers3 },
     { id: "process", label: "Open Process", href: "#process", icon: BriefcaseBusiness },
     { id: "projects", label: "View Projects", href: "#projects", icon: Code2 },

@@ -54,12 +54,14 @@ export function Navbar({
               : "border-transparent bg-transparent",
           )}
         >
-          <Link
-            href="#hero"
-            className="theme-text text-[13px] font-semibold tracking-[0.18em] uppercase sm:text-sm sm:tracking-[0.2em]"
-          >
-            {siteContent.name}
-          </Link>
+          <div className="flex min-w-0 items-center gap-4 sm:gap-5">
+            <Link
+              href="#hero"
+              className="theme-text shrink-0 text-[13px] font-semibold tracking-[0.18em] uppercase sm:text-sm sm:tracking-[0.2em]"
+            >
+              {siteContent.name}
+            </Link>
+          </div>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
@@ -83,7 +85,7 @@ export function Navbar({
             >
               <span>⌘K</span>
             </button>
-            <Button href="#contact" variant="secondary" magnetic className="h-12 px-8">
+            <Button href="#contact" variant="secondary" magnetic className="h-12 px-7">
               Let&apos;s talk
             </Button>
           </div>
@@ -111,9 +113,7 @@ export function Navbar({
               className="glass-panel theme-border mt-3 rounded-[28px] border p-3 lg:hidden"
             >
               <div className="mb-2 flex items-center justify-between px-1">
-                <span className="theme-muted text-xs uppercase tracking-[0.2em]">
-                  Theme
-                </span>
+                <span className="theme-muted text-xs uppercase tracking-[0.2em]">Theme</span>
                 <ThemeToggle theme={theme} onToggle={onToggleTheme} />
               </div>
               {navItems.map((item) => (

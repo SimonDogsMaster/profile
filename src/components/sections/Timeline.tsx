@@ -13,7 +13,11 @@ export function TimelineSection() {
     <section id="timeline" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
         <motion.div className="mb-12 max-w-2xl" {...sectionHeadingMotion}>
-          <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">Experience</p>
+          <div className="mb-4 flex items-center gap-3">
+            <span className="system-label">Log / 05</span>
+            <span className="system-rule" />
+          </div>
+          <p className="system-kicker mb-3">Experience</p>
           <h2 className="theme-text text-3xl font-semibold tracking-tight sm:text-5xl">
             A path shaped by product detail and interactive storytelling.
           </h2>

@@ -17,9 +17,11 @@ export function SkillsSection() {
           {...sectionHeadingMotion}
         >
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">
-              Skills
-            </p>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="system-label">Capability / 03</span>
+              <span className="system-rule" />
+            </div>
+            <p className="system-kicker mb-3">Skills</p>
             <h2 className="theme-text text-3xl font-semibold tracking-tight sm:text-5xl">
               Systems for building clear, high-fidelity interfaces.
             </h2>

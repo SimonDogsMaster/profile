@@ -19,9 +19,11 @@ export function ProcessSection() {
           {...sectionHeadingMotion}
         >
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">
-              Process
-            </p>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="system-label">Workflow / 04</span>
+              <span className="system-rule" />
+            </div>
+            <p className="system-kicker mb-3">Process</p>
             <h2 className="theme-text text-3xl font-semibold tracking-tight sm:text-5xl">
               A clear working rhythm from concept to shipped interface.
             </h2>

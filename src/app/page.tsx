@@ -10,6 +10,7 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { AboutSection } from "@/components/sections/About";
 import { AvailabilitySection } from "@/components/sections/Availability";
 import { ContactSection } from "@/components/sections/Contact";
+import { MotionDNASection } from "@/components/sections/MotionDNA";
 import { ProcessSection } from "@/components/sections/Process";
 import { ProjectsSection } from "@/components/sections/Projects";
 import { SkillsSection } from "@/components/sections/Skills";
@@ -49,11 +50,13 @@ export default function HomePage() {
     <>
       <Navbar
         theme={theme}
-        onToggleTheme={() => setTheme((value) => (value === "dark" ? "light" : "dark"))}
+        onToggleTheme={() =>
+          setTheme((value) => (value === "dark" ? "light" : "dark"))
+        }
         onOpenCommand={() => setCommandOpen(true)}
       />
       <ScrollProgress />
-      <main className="relative">
+      <main className="relative z-10">
         <Hero onOpenCommand={() => setCommandOpen(true)} />
         <AvailabilitySection />
         <AboutSection />
@@ -64,7 +67,10 @@ export default function HomePage() {
         <ContactSection />
       </main>
       <Footer />
-      <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
+      <CommandPalette
+        open={commandOpen}
+        onClose={() => setCommandOpen(false)}
+      />
     </>
   );
 }

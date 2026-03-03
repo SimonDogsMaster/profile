@@ -314,6 +314,8 @@ const files: CodeFile[] = [
   },
 ];
 
+const EDITOR_ROWS = Math.max(...files.map((file) => file.lines.length));
+
 function useTypingCode(file: CodeFile) {
   const reduceMotion = useReducedMotion();
   const linesSource = file.lines;
@@ -454,6 +456,10 @@ function useTypingCode(file: CodeFile) {
       return { renderedTokens };
     });
 
+    while (lines.length < EDITOR_ROWS) {
+      lines.push({ renderedTokens: [] });
+    }
+
     return { activeLine, cursorColumn, lines };
   }, [linesSource, totalCharacters, visibleCharacters]);
 
@@ -492,7 +498,7 @@ export function CodeTabs() {
       initial={reduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.985 }}
       animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
-      className="relative z-20 mx-auto w-full max-w-[92vw] sm:max-w-[90vw] xl:max-w-[760px] 2xl:max-w-[820px]"
+      className="relative z-20 mx-auto w-full max-w-[92vw] sm:max-w-[88vw] xl:max-w-[720px] 2xl:max-w-[780px]"
     >
       <div className="overflow-hidden rounded-[24px] border border-white/8 bg-[#0a0f21]/90 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:rounded-[30px] sm:shadow-[0_32px_110px_rgba(0,0,0,0.32)]">
         <div className="flex flex-wrap items-center gap-2 border-b border-white/8 bg-[#0d1328]/96 px-3 py-3 sm:gap-3 sm:px-6">
