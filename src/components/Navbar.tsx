@@ -62,13 +62,13 @@ export function Navbar({
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
                 className="theme-muted hover-theme-surface theme-interactive rounded-full px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -78,11 +78,11 @@ export function Navbar({
               type="button"
               aria-label="Open command palette"
               onClick={onOpenCommand}
-              className="theme-chip theme-border theme-muted theme-interactive inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
+              className="theme-chip theme-border theme-muted theme-interactive inline-flex h-12 items-center gap-2 rounded-full border px-5 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
             >
               <span>⌘K</span>
             </button>
-            <Button href="#contact" variant="secondary" magnetic>
+            <Button href="#contact" variant="secondary" magnetic className="h-12 px-8">
               Let&apos;s talk
             </Button>
           </div>
@@ -116,14 +116,14 @@ export function Navbar({
                 <ThemeToggle theme={theme} onToggle={onToggleTheme} />
               </div>
               {navItems.map((item) => (
-                <Link
+                <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className="theme-soft hover-theme-surface block rounded-2xl px-4 py-3 text-sm transition"
                 >
                   {item.label}
-                </Link>
+                </a>
               ))}
               <button
                 type="button"

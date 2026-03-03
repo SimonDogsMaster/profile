@@ -41,6 +41,18 @@ export function Button({
       : {};
 
   if (href) {
+    const isHashLink = href.startsWith("#");
+
+    if (isHashLink) {
+      return (
+        <motion.div {...motionProps}>
+          <a href={href} className={cn(sharedClasses, variantClasses[variant], className)}>
+            {children}
+          </a>
+        </motion.div>
+      );
+    }
+
     return (
       <motion.div {...motionProps}>
         <Link href={href} className={cn(sharedClasses, variantClasses[variant], className)}>
