@@ -15,6 +15,7 @@ import { ProcessSection } from "@/components/sections/Process";
 import { ProjectsSection } from "@/components/sections/Projects";
 import { SkillsSection } from "@/components/sections/Skills";
 import { TimelineSection } from "@/components/sections/Timeline";
+import { GlobalExperienceCanvas } from "@/components/three/GlobalExperienceCanvas";
 
 type ThemeMode = "dark" | "light";
 
@@ -48,6 +49,7 @@ export default function HomePage() {
 
   return (
     <>
+      <GlobalExperienceCanvas />
       <Navbar
         theme={theme}
         onToggleTheme={() =>

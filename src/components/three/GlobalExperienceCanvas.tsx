@@ -25,19 +25,19 @@ export function GlobalExperienceCanvas() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.06),transparent_28%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(125,211,252,0.08),transparent_24%),radial-gradient(circle_at_50%_78%,rgba(13,27,72,0.34),transparent_36%)]" />
       <Suspense fallback={<Loader />}>
         <Canvas dpr={[1, 1.8]} gl={{ antialias: true, alpha: true }} shadows={false}>
-          <PerspectiveCamera makeDefault position={[0, 0.12, 7]} fov={34} />
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[3, 4, 4]} intensity={0.9} color="#dbeafe" />
-          <directionalLight position={[-3, -2, 2]} intensity={0.26} color="#7dd3fc" />
+          <PerspectiveCamera makeDefault position={[0, 0.06, 8.4]} fov={42} />
+          <ambientLight intensity={0.22} />
+          <directionalLight position={[2, 3, 5]} intensity={0.18} color="#dbeafe" />
           <WorldScene
             activeSection={world.activeSection}
             pointer={world.pointer}
             reducedMotion={Boolean(reducedMotion)}
             sectionProgress={world.sectionProgress}
             scrollProgress={world.scrollProgress}
+            scrollVelocity={world.scrollVelocity}
           />
         </Canvas>
       </Suspense>
