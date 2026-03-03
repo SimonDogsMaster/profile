@@ -23,6 +23,8 @@ const sectionTargets: Record<
     galaxyX: number;
     galaxyY: number;
     galaxyScale: number;
+    tiltX: number;
+    yawY: number;
   }
 > = {
   hero: {
@@ -31,7 +33,9 @@ const sectionTargets: Record<
     cameraZ: 9.4,
     galaxyX: 1.04,
     galaxyY: 0.04,
-    galaxyScale: 1.28,
+    galaxyScale: 0.84,
+    tiltX: 0.98,
+    yawY: 0.14,
   },
   availability: {
     cameraX: 0.01,
@@ -39,15 +43,19 @@ const sectionTargets: Record<
     cameraZ: 9.1,
     galaxyX: 1.08,
     galaxyY: 0.06,
-    galaxyScale: 1.36,
+    galaxyScale: 0.92,
+    tiltX: 1.02,
+    yawY: 0.16,
   },
   about: {
     cameraX: 0.02,
     cameraY: 0.05,
-    cameraZ: 8.55,
-    galaxyX: 1.14,
-    galaxyY: 0.05,
-    galaxyScale: 1.48,
+    cameraZ: 8.35,
+    galaxyX: 1.26,
+    galaxyY: 0.08,
+    galaxyScale: 0.94,
+    tiltX: 0.98,
+    yawY: 0.13,
   },
   "motion-dna": {
     cameraX: 0.03,
@@ -55,15 +63,19 @@ const sectionTargets: Record<
     cameraZ: 8.1,
     galaxyX: 1.2,
     galaxyY: 0.05,
-    galaxyScale: 1.58,
+    galaxyScale: 1.08,
+    tiltX: 1.08,
+    yawY: 0.19,
   },
   skills: {
     cameraX: 0.03,
     cameraY: 0.03,
-    cameraZ: 7.7,
+    cameraZ: 7.5,
     galaxyX: 1.24,
     galaxyY: 0.05,
-    galaxyScale: 1.7,
+    galaxyScale: 1.16,
+    tiltX: 1,
+    yawY: 0.15,
   },
   process: {
     cameraX: 0.03,
@@ -71,23 +83,29 @@ const sectionTargets: Record<
     cameraZ: 7.35,
     galaxyX: 1.28,
     galaxyY: 0.04,
-    galaxyScale: 1.82,
+    galaxyScale: 1.26,
+    tiltX: 1.12,
+    yawY: 0.21,
   },
   projects: {
     cameraX: 0.04,
     cameraY: 0.01,
-    cameraZ: 7.05,
+    cameraZ: 6.9,
     galaxyX: 1.32,
     galaxyY: 0.04,
-    galaxyScale: 1.94,
+    galaxyScale: 1.36,
+    tiltX: 1.04,
+    yawY: 0.17,
   },
   timeline: {
     cameraX: 0.04,
     cameraY: 0,
-    cameraZ: 6.85,
-    galaxyX: 1.34,
-    galaxyY: 0.03,
-    galaxyScale: 2.02,
+    cameraZ: 6.7,
+    galaxyX: 1.42,
+    galaxyY: 0.1,
+    galaxyScale: 1.28,
+    tiltX: 1.08,
+    yawY: 0.19,
   },
   contact: {
     cameraX: 0.04,
@@ -95,7 +113,9 @@ const sectionTargets: Record<
     cameraZ: 6.8,
     galaxyX: 1.28,
     galaxyY: 0.02,
-    galaxyScale: 1.92,
+    galaxyScale: 1.36,
+    tiltX: 1.14,
+    yawY: 0.22,
   },
 };
 
@@ -122,6 +142,38 @@ function createPointSprite() {
   gradient.addColorStop(0.18, "rgba(255,255,255,0.98)");
   gradient.addColorStop(0.42, "rgba(255,255,255,0.4)");
   gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, size, size);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function createGlowTexture() {
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return null;
+  }
+
+  const gradient = context.createRadialGradient(
+    size / 2,
+    size / 2,
+    size * 0.04,
+    size / 2,
+    size / 2,
+    size * 0.48,
+  );
+  gradient.addColorStop(0, "rgba(255,250,250,0.95)");
+  gradient.addColorStop(0.18, "rgba(255,220,240,0.42)");
+  gradient.addColorStop(0.42, "rgba(192,132,252,0.12)");
+  gradient.addColorStop(1, "rgba(192,132,252,0)");
 
   context.fillStyle = gradient;
   context.fillRect(0, 0, size, size);
@@ -178,40 +230,75 @@ function createGalaxyLayer(
     const branch = index % branches;
     const radius = Math.pow(Math.random(), 0.72 + coreBias) * radiusLimit;
     const branchAngle = (branch / branches) * Math.PI * 2;
+    const branchSkew = 0.86 + ((branch % 2 === 0 ? 1 : -1) * 0.12 + branch * 0.03);
     const spinAngle = radius * spinScale;
-    const armTightness = 0.1 + radius * 0.014;
+    const armWave =
+      Math.sin(radius * 0.9 + branch * 1.7) * 0.5 +
+      Math.sin(radius * 1.8 - branch * 0.8) * 0.28;
+    const armDensity = 0.72 + armWave * 0.22 + Math.sin(radius * 0.34 + branch) * 0.08;
+    const clusterBias = Math.random();
+    const clusterTightness = clusterBias > armDensity ? 1.9 : 1;
+    const armTightness = (0.035 + radius * 0.008) / clusterTightness;
     const angle =
       branchAngle + spinAngle + (Math.random() - 0.5) * armTightness;
+    const asymmetry = 1 + Math.sin(radius * 0.42 + branch * 1.4) * 0.08;
+    const innerCompression = 1 - Math.min(0.18, radius / radiusLimit * 0.12);
 
     const offsetX =
       Math.pow(Math.random(), 1.7) *
       (Math.random() > 0.5 ? 1 : -1) *
-      (0.08 + radius * randomScale);
+      (0.05 + radius * randomScale * (clusterBias > armDensity ? 0.6 : 1));
     const offsetZ =
       Math.pow(Math.random(), 1.7) *
       (Math.random() > 0.5 ? 1 : -1) *
-      (0.08 + radius * randomScale * 0.92);
+      (0.05 + radius * randomScale * 0.92 * (clusterBias > armDensity ? 0.6 : 1));
     const offsetY =
       Math.pow(Math.random(), 1.9) *
       (Math.random() > 0.5 ? 1 : -1) *
-      (0.02 + radius * yScale);
+      (0.014 + radius * yScale * (clusterBias > armDensity ? 0.7 : 1));
 
-    positions[stride] = Math.cos(angle) * radius * 1.36 + offsetX;
+    positions[stride] =
+      Math.cos(angle) * radius * 1.36 * branchSkew * asymmetry + offsetX;
     positions[stride + 1] = offsetY;
-    positions[stride + 2] = Math.sin(angle) * radius * 0.82 + offsetZ;
+    positions[stride + 2] =
+      Math.sin(angle) * radius * 0.82 * innerCompression + offsetZ;
 
     const mix = Math.min(1, radius / radiusLimit);
+    const pulse = 0.92 + Math.max(0, armWave) * 0.12;
     const color = coreColor
       .clone()
       .lerp(pinkColor, mix * 0.74)
       .lerp(violetColor, Math.max(0, mix - 0.16) * 0.82)
       .lerp(blueEdge, Math.max(0, mix - 0.48) * 0.56);
-    colors[stride] = color.r;
-    colors[stride + 1] = color.g;
-    colors[stride + 2] = color.b;
+    colors[stride] = color.r * pulse;
+    colors[stride + 1] = color.g * pulse;
+    colors[stride + 2] = color.b * pulse;
   }
 
   return { positions, colors };
+}
+
+function tintColors(
+  source: Float32Array,
+  colorA: string,
+  colorB: string,
+  strength = 0.5,
+) {
+  const result = new Float32Array(source.length);
+  const a = new THREE.Color(colorA);
+  const b = new THREE.Color(colorB);
+
+  for (let index = 0; index < source.length; index += 3) {
+    const base = new THREE.Color(source[index], source[index + 1], source[index + 2]);
+    const bias = ((index / 3) % 7) / 6;
+    const tint = a.clone().lerp(b, bias);
+    base.lerp(tint, strength);
+    result[index] = base.r;
+    result[index + 1] = base.g;
+    result[index + 2] = base.b;
+  }
+
+  return result;
 }
 
 function createCoreLayer(count: number) {
@@ -316,24 +403,48 @@ export function ParticleGalaxyScene({
 }: ParticleGalaxySceneProps) {
   const starfieldRef = useRef<Group>(null);
   const galaxyRef = useRef<Group>(null);
+  const discRef = useRef<Group>(null);
+  const dustGroupRef = useRef<Group>(null);
+  const frontDustGroupRef = useRef<Group>(null);
+  const armsGroupRef = useRef<Group>(null);
+  const bulgeGroupRef = useRef<Group>(null);
+  const coreGroupRef = useRef<Group>(null);
   const starsRef = useRef<Points>(null);
   const armsRef = useRef<Points>(null);
+  const outerArmsRef = useRef<Points>(null);
   const dustRef = useRef<Points>(null);
   const bulgeRef = useRef<Points>(null);
   const coreRef = useRef<Points>(null);
 
   const pointSprite = useMemo(() => createPointSprite(), []);
-  const backgroundStars = useMemo(() => createBackgroundStars(1200), []);
+  const glowTexture = useMemo(() => createGlowTexture(), []);
+  const backgroundStars = useMemo(() => createBackgroundStars(980), []);
   const galaxyArms = useMemo(
-    () => createGalaxyLayer(7600, 4, 10.8, 0.12, 0.018, 1.02),
+    () => createGalaxyLayer(5200, 4, 8.2, 0.08, 0.014, 1.1),
+    [],
+  );
+  const galaxyOuterArms = useMemo(
+    () => createGalaxyLayer(4200, 4, 12.8, 0.16, 0.024, 0.9, 0.06),
     [],
   );
   const galaxyDust = useMemo(
-    () => createGalaxyLayer(5200, 4, 12.6, 0.22, 0.042, 0.94, 0.08),
+    () => createGalaxyLayer(3600, 4, 12.6, 0.18, 0.034, 0.94, 0.08),
     [],
   );
-  const galaxyBulge = useMemo(() => createBulgeLayer(2600), []);
-  const galaxyCore = useMemo(() => createCoreLayer(2200), []);
+  const galaxyBulge = useMemo(() => createBulgeLayer(1800), []);
+  const galaxyCore = useMemo(() => createCoreLayer(1400), []);
+  const armColors = useMemo(
+    () => tintColors(galaxyArms.colors, "#ffd0ea", "#c084fc", 0.34),
+    [galaxyArms.colors],
+  );
+  const outerArmColors = useMemo(
+    () => tintColors(galaxyOuterArms.colors, "#f9a8d4", "#818cf8", 0.42),
+    [galaxyOuterArms.colors],
+  );
+  const dustColors = useMemo(
+    () => tintColors(galaxyDust.colors, "#c4b5fd", "#93c5fd", 0.18),
+    [galaxyDust.colors],
+  );
 
   useFrame((state) => {
     const target = sectionTargets[activeSection] ?? sectionTargets.hero;
@@ -412,7 +523,7 @@ export function ParticleGalaxyScene({
       colorAttribute.needsUpdate = true;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.045 + cameraZoom * 0.018,
+        0.04 + cameraZoom * 0.014,
         0.05,
       );
     }
@@ -420,9 +531,9 @@ export function ParticleGalaxyScene({
     if (galaxyRef.current) {
       const targetScale =
         target.galaxyScale +
-        scrollProgress * 0.018 +
-        sectionProgress * 0.05 +
-        scrollKick * 0.04;
+        scrollProgress * 0.004 +
+        sectionProgress * 0.016 +
+        scrollKick * 0.012;
       const scale = THREE.MathUtils.lerp(
         galaxyRef.current.scale.x,
         targetScale,
@@ -437,22 +548,82 @@ export function ParticleGalaxyScene({
       );
       galaxyRef.current.position.y = THREE.MathUtils.lerp(
         galaxyRef.current.position.y,
-        target.galaxyY + (reducedMotion ? 0 : pointer.y * 0.08),
+        target.galaxyY +
+          Math.sin(time * 0.18) * 0.035 +
+          (reducedMotion ? 0 : pointer.y * 0.06),
         0.04,
       );
       galaxyRef.current.rotation.x = THREE.MathUtils.lerp(
         galaxyRef.current.rotation.x,
-        1.18 + (reducedMotion ? 0 : pointer.y * 0.05),
+        target.tiltX + (reducedMotion ? 0 : pointer.y * 0.035),
         0.04,
       );
       galaxyRef.current.rotation.y = THREE.MathUtils.lerp(
         galaxyRef.current.rotation.y,
-        0.24 + (reducedMotion ? 0 : pointer.x * 0.08),
+        target.yawY + (reducedMotion ? 0 : pointer.x * 0.05),
         0.04,
       );
-      galaxyRef.current.rotation.z += reducedMotion
+      galaxyRef.current.rotation.z = THREE.MathUtils.lerp(
+        galaxyRef.current.rotation.z,
+        0.08 + (reducedMotion ? 0 : pointer.x * -0.02),
+        0.04,
+      );
+    }
+
+    if (discRef.current) {
+      discRef.current.rotation.y += reducedMotion
         ? 0
-        : 0.0007 + scrollKick * 0.00024;
+        : 0.00056 + scrollKick * 0.00012;
+      discRef.current.rotation.x = THREE.MathUtils.lerp(
+        discRef.current.rotation.x,
+        0.04 + (reducedMotion ? 0 : pointer.y * 0.01),
+        0.04,
+      );
+    }
+
+    if (armsGroupRef.current) {
+      armsGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00078;
+    }
+
+    if (dustGroupRef.current) {
+      dustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00034;
+      dustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        dustGroupRef.current.rotation.x,
+        0.12 + Math.sin(time * 0.22) * 0.02,
+        0.03,
+      );
+    }
+
+    if (frontDustGroupRef.current) {
+      frontDustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00048;
+      frontDustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        frontDustGroupRef.current.rotation.x,
+        -0.1 + Math.sin(time * 0.24) * 0.03,
+        0.03,
+      );
+      frontDustGroupRef.current.position.z = THREE.MathUtils.lerp(
+        frontDustGroupRef.current.position.z,
+        0.24 + Math.sin(time * 0.28) * 0.04,
+        0.03,
+      );
+    }
+
+    if (bulgeGroupRef.current) {
+      bulgeGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00044;
+      bulgeGroupRef.current.position.z = THREE.MathUtils.lerp(
+        bulgeGroupRef.current.position.z,
+        Math.sin(time * 0.35) * 0.08,
+        0.03,
+      );
+    }
+
+    if (coreGroupRef.current) {
+      coreGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00062;
+      coreGroupRef.current.position.z = THREE.MathUtils.lerp(
+        coreGroupRef.current.position.z,
+        Math.sin(time * 0.4) * 0.05,
+        0.04,
+      );
     }
 
     if (armsRef.current) {
@@ -465,33 +636,44 @@ export function ParticleGalaxyScene({
       material.opacity = THREE.MathUtils.lerp(material.opacity, 0.88, 0.05);
     }
 
+    if (outerArmsRef.current) {
+      const material = outerArmsRef.current.material as THREE.PointsMaterial;
+      material.size = THREE.MathUtils.lerp(
+        material.size,
+        0.024 + cameraZoom * 0.01,
+        0.06,
+      );
+      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.56, 0.05);
+    }
+
     if (dustRef.current) {
       const material = dustRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.013 + cameraZoom * 0.008,
+        0.011 + cameraZoom * 0.006,
         0.06,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.22, 0.05);
+      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.14, 0.05);
     }
 
     if (bulgeRef.current) {
       const material = bulgeRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.024 + cameraZoom * 0.016,
+        0.02 + cameraZoom * 0.012,
         0.07,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.48, 0.05);
+      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.34, 0.05);
     }
 
     if (coreRef.current) {
       const material = coreRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.07 + cameraZoom * 0.024,
+        0.048 + cameraZoom * 0.016,
         0.08,
       );
+      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.82, 0.05);
     }
   });
 
@@ -502,56 +684,90 @@ export function ParticleGalaxyScene({
         pointRef={starsRef}
         positions={backgroundStars.positions}
         colors={backgroundStars.colors}
-        size={0.05}
-        opacity={0.82}
+        size={0.042}
+        opacity={0.72}
       />
 
       <group
         ref={galaxyRef}
-        position={[1.08, 0.04, -2]}
-        rotation={[1.18, 0.24, 0.12]}
+        position={[1.08, 0.04, -3]}
+        rotation={[0.98, 0.14, 0.08]}
       >
-        <group rotation={[0.08, 0, 0]}>
-          <SpritePoints
-            pointSprite={pointSprite}
-            pointRef={dustRef}
-            positions={galaxyDust.positions}
-            colors={galaxyDust.colors}
-            size={0.02}
-            opacity={0.22}
-          />
-        </group>
+        <group ref={discRef} rotation={[0.04, 0, 0]}>
+          <group ref={dustGroupRef} rotation={[0.12, 0, 0]} position={[0, 0, -0.18]}>
+            <SpritePoints
+              pointSprite={pointSprite}
+              pointRef={dustRef}
+              positions={galaxyDust.positions}
+              colors={dustColors}
+              size={0.02}
+              opacity={0.14}
+            />
+          </group>
 
-        <group rotation={[0.04, 0, 0]}>
+          <group ref={frontDustGroupRef} rotation={[-0.1, 0.08, 0]} position={[0, 0, 0.24]}>
+            <SpritePoints
+              pointSprite={pointSprite}
+              positions={galaxyDust.positions}
+              colors={dustColors}
+              size={0.016}
+              opacity={0.08}
+            />
+          </group>
+
+          <group ref={armsGroupRef} rotation={[0.04, 0, 0]}>
           <SpritePoints
             pointSprite={pointSprite}
             pointRef={armsRef}
             positions={galaxyArms.positions}
-            colors={galaxyArms.colors}
+            colors={armColors}
             size={0.034}
             opacity={0.88}
           />
-        </group>
-
-        <group rotation={[-0.08, 0.14, 0]}>
           <SpritePoints
             pointSprite={pointSprite}
-            pointRef={bulgeRef}
-            positions={galaxyBulge.positions}
-            colors={galaxyBulge.colors}
+            pointRef={outerArmsRef}
+            positions={galaxyOuterArms.positions}
+            colors={outerArmColors}
             size={0.026}
-            opacity={0.48}
+            opacity={0.56}
           />
         </group>
 
-        <SpritePoints
-          pointSprite={pointSprite}
-          pointRef={coreRef}
-          positions={galaxyCore.positions}
-          colors={galaxyCore.colors}
-          size={0.074}
-          opacity={1}
-        />
+          <group ref={bulgeGroupRef} rotation={[-0.08, 0.14, 0]} position={[0, 0, 0.12]}>
+            <SpritePoints
+              pointSprite={pointSprite}
+              pointRef={bulgeRef}
+              positions={galaxyBulge.positions}
+              colors={galaxyBulge.colors}
+              size={0.022}
+              opacity={0.34}
+            />
+          </group>
+
+          <group ref={coreGroupRef} position={[0, 0, 0.2]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -0.04]}>
+              <planeGeometry args={[2.8, 2.8]} />
+              <meshBasicMaterial
+                map={glowTexture ?? undefined}
+                transparent
+                opacity={0.18}
+                color="#ffd5ee"
+                blending={THREE.AdditiveBlending}
+                depthWrite={false}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+            <SpritePoints
+              pointSprite={pointSprite}
+              pointRef={coreRef}
+              positions={galaxyCore.positions}
+              colors={galaxyCore.colors}
+              size={0.052}
+              opacity={0.82}
+            />
+          </group>
+        </group>
       </group>
     </group>
   );

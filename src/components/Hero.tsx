@@ -17,7 +17,7 @@ export function Hero({ onOpenCommand }: { onOpenCommand: () => void }) {
       id="hero"
       className="relative overflow-hidden pb-14 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36"
     >
-      <div className="pointer-events-none absolute inset-0">
+      {/* <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-[8%] top-16 h-72 w-72 rounded-full bg-cyan-400/12 blur-[110px]" />
         <div className="absolute right-[8%] top-1/3 h-64 w-64 rounded-full bg-indigo-400/10 blur-[120px]" />
         {[
@@ -95,7 +95,7 @@ export function Hero({ onOpenCommand }: { onOpenCommand: () => void }) {
             className={`absolute ${position} h-4 w-4 rounded-full bg-cyan-50/88 shadow-[0_0_34px_rgba(125,211,252,0.32)]`}
           />
         ))}
-      </div>
+      </div> */}
 
       <Container className="relative">
         <div className="grid items-center gap-12 lg:gap-14 xl:grid-cols-[0.92fr_1.08fr] xl:gap-10">
