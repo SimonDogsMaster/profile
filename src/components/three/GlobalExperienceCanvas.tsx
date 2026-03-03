@@ -8,8 +8,11 @@ import { Suspense } from "react";
 
 import { useSectionWorld } from "./useSectionWorld";
 
-const WorldScene = dynamic(
-  () => import("./WorldScene").then((module) => ({ default: module.WorldScene })),
+const ParticleGalaxyScene = dynamic(
+  () =>
+    import("./ParticleGalaxyScene").then((module) => ({
+      default: module.ParticleGalaxyScene
+    })),
   { ssr: false }
 );
 
@@ -31,7 +34,7 @@ export function GlobalExperienceCanvas() {
           <PerspectiveCamera makeDefault position={[0, 0.06, 8.4]} fov={42} />
           <ambientLight intensity={0.22} />
           <directionalLight position={[2, 3, 5]} intensity={0.18} color="#dbeafe" />
-          <WorldScene
+          <ParticleGalaxyScene
             activeSection={world.activeSection}
             pointer={world.pointer}
             reducedMotion={Boolean(reducedMotion)}

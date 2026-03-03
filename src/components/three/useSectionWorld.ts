@@ -59,7 +59,8 @@ export function useSectionWorld(): SectionWorldState {
       const timestamp = performance.now();
       const deltaScroll = scrollTop - lastScrollTop;
       const deltaTime = Math.max(timestamp - lastTimestamp, 16);
-      const nextVelocity = Math.min(Math.abs(deltaScroll) / deltaTime / 1.2, 1.35);
+      const velocitySign = deltaScroll === 0 ? 0 : Math.sign(deltaScroll);
+      const nextVelocity = velocitySign * Math.min(Math.abs(deltaScroll) / deltaTime / 1.2, 1.35);
 
       lastScrollTop = scrollTop;
       lastTimestamp = timestamp;
@@ -91,7 +92,10 @@ export function useSectionWorld(): SectionWorldState {
         pointer: current.pointer,
         sectionProgress: nextSectionProgress,
         scrollProgress,
-        scrollVelocity: Math.max(current.scrollVelocity * 0.74, nextVelocity)
+        scrollVelocity:
+          Math.abs(nextVelocity) > Math.abs(current.scrollVelocity * 0.74)
+            ? nextVelocity
+            : current.scrollVelocity * 0.74
       }));
     };
 
@@ -112,13 +116,16 @@ export function useSectionWorld(): SectionWorldState {
 
     const decayVelocity = () => {
       setState((current) => {
-        if (current.scrollVelocity < 0.001) {
+        if (Math.abs(current.scrollVelocity) < 0.01) {
           return current;
         }
 
         return {
           ...current,
-          scrollVelocity: current.scrollVelocity * 0.92
+          scrollVelocity:
+            Math.abs(current.scrollVelocity * 0.9) < 0.01
+              ? 0
+              : current.scrollVelocity * 0.9
         };
       });
 
