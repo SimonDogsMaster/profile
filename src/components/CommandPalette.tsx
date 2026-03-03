@@ -92,28 +92,34 @@ export function CommandPalette({
             </div>
 
             <div className="mt-3 space-y-2">
-              {items.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => navigate(item.href)}
-                    className="theme-soft hover-theme-surface flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="theme-chip theme-border rounded-xl border p-2">
-                        <Icon className="size-4" />
+              {items.length ? (
+                items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => navigate(item.href)}
+                      className="theme-soft hover-theme-surface flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="theme-chip theme-border rounded-xl border p-2">
+                          <Icon className="size-4" />
+                        </span>
+                        {item.label}
                       </span>
-                      {item.label}
-                    </span>
-                    <span className="flex items-center gap-1 text-xs text-[var(--subtle-text)]">
-                      Enter
-                      <CornerDownLeft className="size-3.5" />
-                    </span>
-                  </button>
-                );
-              })}
+                      <span className="flex items-center gap-1 text-xs text-[var(--subtle-text)]">
+                        Enter
+                        <CornerDownLeft className="size-3.5" />
+                      </span>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="theme-muted rounded-2xl border border-white/8 px-4 py-5 text-sm">
+                  No matching command. Try “projects”, “contact”, or “process”.
+                </div>
+              )}
             </div>
           </motion.div>
         </motion.div>

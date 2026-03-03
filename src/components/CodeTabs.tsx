@@ -104,7 +104,7 @@ const files: CodeFile[] = [
         { text: "      <", color: "#d6deeb" },
         { text: "h1", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
-        { text: "Simon builds premium interfaces.", color: "#c9d1e7" },
+        { text: "Simon ships calm, high-fidelity UI.", color: "#c9d1e7" },
         { text: " <", color: "#d6deeb" },
         { text: "/h1", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
@@ -113,7 +113,7 @@ const files: CodeFile[] = [
         { text: "      <", color: "#d6deeb" },
         { text: "p", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
-        { text: "UI + motion for modern products.", color: "#8fa1c7" },
+        { text: "Front-end systems from Bangkok.", color: "#8fa1c7" },
         { text: " <", color: "#d6deeb" },
         { text: "/p", color: "#ff7a7a" },
         { text: ">", color: "#d6deeb" },
@@ -131,7 +131,7 @@ const files: CodeFile[] = [
       [
         { text: "        Clicked: ", color: "#c9d1e7" },
         { text: "{count}", color: "#ff7a7a" },
-        { text: " launch states", color: "#c9d1e7" },
+        { text: " shipped flows", color: "#c9d1e7" },
       ],
       [
         { text: "      <", color: "#d6deeb" },
@@ -492,18 +492,18 @@ export function CodeTabs() {
       initial={reduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.985 }}
       animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
-      className="relative z-20 mx-auto w-full max-w-[90vw] xl:max-w-[760px] 2xl:max-w-[820px]"
+      className="relative z-20 mx-auto w-full max-w-[92vw] sm:max-w-[90vw] xl:max-w-[760px] 2xl:max-w-[820px]"
     >
-      <div className="overflow-hidden rounded-[30px] border border-white/8 bg-[#0a0f21]/90 shadow-[0_32px_110px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-        <div className="flex flex-wrap items-center gap-3 border-b border-white/8 bg-[#0d1328]/96 px-4 py-3 sm:px-6">
-          <div className="mr-2 flex items-center gap-2">
+      <div className="overflow-hidden rounded-[24px] border border-white/8 bg-[#0a0f21]/90 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:rounded-[30px] sm:shadow-[0_32px_110px_rgba(0,0,0,0.32)]">
+        <div className="flex flex-wrap items-center gap-2 border-b border-white/8 bg-[#0d1328]/96 px-3 py-3 sm:gap-3 sm:px-6">
+          <div className="mr-1 flex items-center gap-2 sm:mr-2">
             <span className="size-3 rounded-full bg-[#ff7f67]" />
             <span className="size-3 rounded-full bg-[#f2d05e]" />
             <span className="size-3 rounded-full bg-[#7bd968]" />
           </div>
 
           <LayoutGroup id="hero-code-tabs">
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               {files.map((file, index) => {
                 const active = index === activeTab;
 
@@ -512,12 +512,12 @@ export function CodeTabs() {
                     key={file.label}
                     type="button"
                     onClick={() => setActiveTab(index)}
-                    className="group relative rounded-t-2xl px-4 py-2 text-sm font-medium text-[#6f7b9f] transition duration-200 hover:text-[#dbe6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 sm:px-5 sm:py-2.5"
+                    className="group relative rounded-t-xl px-3 py-2 text-[13px] font-medium text-[#6f7b9f] transition duration-200 hover:text-[#dbe6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 sm:rounded-t-2xl sm:px-5 sm:py-2.5 sm:text-sm"
                   >
                     {active ? (
                       <motion.span
                         layoutId="active-code-tab"
-                        className="absolute inset-0 rounded-t-2xl border border-b-0 border-cyan-300/18 bg-[#182042]"
+                        className="absolute inset-0 rounded-t-xl border border-b-0 border-cyan-300/18 bg-[#182042] sm:rounded-t-2xl"
                         transition={{
                           type: "spring",
                           stiffness: 360,
@@ -561,10 +561,10 @@ export function CodeTabs() {
                     : { opacity: 0, y: -10, filter: "blur(4px)" }
                 }
                 transition={{ duration: 0.24, ease: "easeOut" }}
-                className="min-w-[560px]"
+                className="min-w-[480px] sm:min-w-[560px]"
               >
-                <div className="grid grid-cols-[56px_1fr] font-mono text-[13px] leading-7 sm:grid-cols-[68px_1fr] sm:text-[14px] sm:leading-8 xl:text-[15px] xl:leading-9">
-                  <div className="border-r border-white/5 bg-white/[0.025] px-3 py-5 text-right text-[#55627f] sm:px-4 sm:py-6">
+                <div className="grid grid-cols-[44px_1fr] font-mono text-[12px] leading-6 sm:grid-cols-[68px_1fr] sm:text-[14px] sm:leading-8 xl:text-[15px] xl:leading-9">
+                  <div className="border-r border-white/5 bg-white/[0.025] px-2 py-4 text-right text-[#55627f] sm:px-4 sm:py-6">
                     {lines.map((_, index) => (
                       <div
                         key={index}
@@ -575,7 +575,7 @@ export function CodeTabs() {
                     ))}
                   </div>
 
-                  <div className="relative px-4 py-5 sm:px-5 sm:py-6">
+                  <div className="relative px-3 py-4 sm:px-5 sm:py-6">
                     {lines.map((line, lineIndex) => (
                       <div
                         key={lineIndex}
@@ -597,7 +597,7 @@ export function CodeTabs() {
                           </span>
                         ))}
                         {lineIndex === activeLine && cursorVisible ? (
-                          <span className="ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-cyan-300 sm:h-5 sm:translate-y-1" />
+                          <span className="ml-0.5 inline-block h-3.5 w-px translate-y-0.5 bg-cyan-300 sm:h-5 sm:translate-y-1" />
                         ) : null}
                       </div>
                     ))}
@@ -607,8 +607,8 @@ export function CodeTabs() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between border-t border-white/8 bg-[#0d1328]/96 px-4 py-3 font-mono text-[11px] text-[#7381a8] sm:px-6 sm:text-[12px]">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-2 border-t border-white/8 bg-[#0d1328]/96 px-3 py-3 font-mono text-[10px] text-[#7381a8] sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:text-[12px]">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <span className="text-[#9ddc8a]">{`Ln ${activeLine + 1}, Col ${cursorColumn}`}</span>
               <span>{activeFile.statusMeta ?? "Spaces: 2"}</span>
             </div>

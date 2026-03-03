@@ -15,7 +15,7 @@ export function ProjectsSection() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   return (
-    <section id="projects" className="relative py-24 sm:py-28">
+    <section id="projects" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
         <motion.div
           className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
@@ -34,7 +34,7 @@ export function ProjectsSection() {
         </motion.div>
 
         <LayoutGroup>
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3 lg:gap-5">
             {siteContent.projects.map((project, index) => (
               <motion.button
                 key={project.slug}
@@ -44,9 +44,30 @@ export function ProjectsSection() {
                 {...sectionItemMotion(index)}
               >
                 <Card className="theme-border h-full rounded-[30px] p-6 transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-300/30 group-hover:shadow-[0_24px_64px_rgba(56,189,248,0.12)]">
-                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--subtle-text)]">{project.eyebrow}</p>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs uppercase tracking-[0.22em] text-[var(--subtle-text)]">{project.eyebrow}</p>
+                    <span className="text-xs uppercase tracking-[0.18em] text-[#7f8cab]">
+                      {project.year}
+                    </span>
+                  </div>
                   <h3 className="theme-text mt-5 text-2xl font-medium">{project.title}</h3>
+                  <p className="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-400/72">
+                    {project.roleLabel}
+                  </p>
                   <p className="theme-muted mt-4 text-sm leading-7">{project.description}</p>
+                  <p className="theme-soft mt-5 text-sm leading-7">{project.impact}</p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {project.metrics.slice(0, 2).map((metric) => (
+                      <span
+                        key={metric}
+                        className="rounded-full border border-white/8 bg-white/[0.02] px-3 py-1.5 text-xs text-[#a9b4cf]"
+                      >
+                        {metric}
+                      </span>
+                    ))}
+                  </div>
+
                   <div className="mt-6 flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span key={tag} className="theme-chip theme-border theme-soft rounded-full border px-3 py-1.5 text-xs">
@@ -75,8 +96,18 @@ export function ProjectsSection() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.22em] text-cyan-400/72">{activeProject.eyebrow}</p>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <p className="text-xs uppercase tracking-[0.22em] text-cyan-400/72">
+                          {activeProject.eyebrow}
+                        </p>
+                        <span className="text-xs uppercase tracking-[0.18em] text-[#7f8cab]">
+                          {activeProject.year}
+                        </span>
+                      </div>
                       <h3 className="theme-text mt-3 text-3xl font-semibold">{activeProject.title}</h3>
+                      <p className="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-400/72">
+                        {activeProject.roleLabel}
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -89,6 +120,9 @@ export function ProjectsSection() {
                   </div>
 
                   <p className="theme-soft mt-5 max-w-2xl text-base leading-8">{activeProject.longDescription}</p>
+                  <p className="theme-muted mt-4 max-w-2xl text-sm leading-7">
+                    {activeProject.impact}
+                  </p>
 
                   <div className="mt-8 grid gap-6 md:grid-cols-[1.2fr_0.9fr]">
                     <div>
@@ -119,6 +153,8 @@ export function ProjectsSection() {
                       <Link
                         key={link.label}
                         href={link.href}
+                        target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                        rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"}
                         className="theme-chip theme-border theme-text inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition hover:border-cyan-300/40"
                       >
                         {link.label}

@@ -15,6 +15,7 @@ import { Container } from "./ui/Container";
 const navItems = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
+  { label: "Process", href: "#process" },
   { label: "Projects", href: "#projects" },
   { label: "Timeline", href: "#timeline" },
   { label: "Contact", href: "#contact" },
@@ -47,7 +48,7 @@ export function Navbar({
       <Container>
         <div
           className={cn(
-            "mx-auto flex max-w-5xl items-center justify-between rounded-full border px-4 py-3 transition-all duration-500",
+            "mx-auto flex max-w-5xl items-center justify-between rounded-full border px-3 py-3 sm:px-4 transition-all duration-500",
             isScrolled
               ? "glass-panel theme-border"
               : "border-transparent bg-transparent",
@@ -55,7 +56,7 @@ export function Navbar({
         >
           <Link
             href="#hero"
-            className="theme-text text-sm font-semibold tracking-[0.2em] uppercase"
+            className="theme-text text-[13px] font-semibold tracking-[0.18em] uppercase sm:text-sm sm:tracking-[0.2em]"
           >
             {siteContent.name}
           </Link>
@@ -136,6 +137,9 @@ export function Navbar({
                 <Command className="size-4" />
                 Open command palette
               </button>
+              <Button href="#contact" variant="secondary" className="mt-2 w-full justify-center">
+                Let&apos;s talk
+              </Button>
             </motion.div>
           ) : null}
         </AnimatePresence>

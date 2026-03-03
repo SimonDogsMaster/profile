@@ -18,9 +18,9 @@ export function AboutSection() {
   ];
 
   return (
-    <section id="about" className="relative py-24 sm:py-28">
+    <section id="about" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-8 xl:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-8 xl:gap-12">
           <motion.div className="order-2 lg:order-1" {...sectionHeadingMotion}>
             <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">
               About
@@ -29,18 +29,18 @@ export function AboutSection() {
               Product thinking with motion built into the system.
             </h2>
 
-            <div className="mt-8 rounded-[32px] border border-white/8 bg-white/[0.02] px-6 py-7 sm:px-8 sm:py-9">
-              <p className="theme-soft max-w-3xl text-lg leading-8 sm:text-[1.2rem] sm:leading-9">
+            <div className="mt-6 rounded-[28px] border border-white/8 bg-white/[0.02] px-6 py-6 sm:mt-8 sm:rounded-[32px] sm:px-8 sm:py-8">
+              <p className="theme-soft max-w-3xl text-lg leading-8 sm:text-[1.15rem] sm:leading-9">
                 {siteContent.about.intro}
               </p>
 
-              <div className="theme-muted mt-7 max-w-2xl space-y-5 text-sm leading-7 sm:text-[15px]">
+              <div className="theme-muted mt-6 max-w-2xl space-y-4 text-sm leading-7 sm:mt-7 sm:space-y-5 sm:text-[15px]">
                 {siteContent.about.body.map((item) => (
                   <p key={item}>{item}</p>
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-wrap gap-3">
                 {metaItems.map((item) => (
                   <span
                     key={item}
@@ -56,7 +56,7 @@ export function AboutSection() {
           <div className="order-1 space-y-4 lg:order-2">
             <motion.div {...sectionItemMotion()}>
               <Card className="overflow-hidden rounded-[32px] p-0">
-                <div className="relative aspect-[4/4.8]">
+                <div className="relative aspect-[4/4.15] sm:aspect-[4/4.5] lg:aspect-[4/4.8]">
                   <Image
                     src="/simon.jpg"
                     alt="Portrait of Simon Riverman"

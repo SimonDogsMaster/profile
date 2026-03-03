@@ -98,6 +98,10 @@ a {
   text-decoration: none;
 }
 
+section[id] {
+  scroll-margin-top: 7rem;
+}
+
 button,
 input,
 textarea {

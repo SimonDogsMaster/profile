@@ -8,7 +8,9 @@ import { Hero } from "@/components/Hero";
 import { Navbar } from "@/components/Navbar";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { AboutSection } from "@/components/sections/About";
+import { AvailabilitySection } from "@/components/sections/Availability";
 import { ContactSection } from "@/components/sections/Contact";
+import { ProcessSection } from "@/components/sections/Process";
 import { ProjectsSection } from "@/components/sections/Projects";
 import { SkillsSection } from "@/components/sections/Skills";
 import { TimelineSection } from "@/components/sections/Timeline";
@@ -53,8 +55,10 @@ export default function HomePage() {
       <ScrollProgress />
       <main className="relative">
         <Hero onOpenCommand={() => setCommandOpen(true)} />
+        <AvailabilitySection />
         <AboutSection />
         <SkillsSection />
+        <ProcessSection />
         <ProjectsSection />
         <TimelineSection />
         <ContactSection />

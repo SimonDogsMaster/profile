@@ -7,7 +7,7 @@ export function ScrollProgress() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 140, damping: 22, mass: 0.2 });
 
   return (
-    <div className="theme-chip theme-border fixed right-4 top-1/2 z-40 hidden h-36 -translate-y-1/2 rounded-full border p-1 md:flex">
+    <div className="theme-chip theme-border fixed right-5 top-1/2 z-40 hidden h-32 -translate-y-1/2 rounded-full border p-1 lg:flex xl:h-36">
       <div className="relative w-1 overflow-hidden rounded-full bg-[var(--panel-hover)]">
         <motion.div
           style={{ scaleY, transformOrigin: "top" }}

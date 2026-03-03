@@ -10,7 +10,7 @@ import { sectionHeadingMotion, sectionItemMotion } from "./sectionMotion";
 
 export function TimelineSection() {
   return (
-    <section id="timeline" className="relative py-24 sm:py-28">
+    <section id="timeline" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
         <motion.div className="mb-12 max-w-2xl" {...sectionHeadingMotion}>
           <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">Experience</p>
@@ -19,14 +19,19 @@ export function TimelineSection() {
           </h2>
         </motion.div>
 
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {siteContent.timeline.map((item, index) => (
             <motion.div key={`${item.year}-${item.title}`} {...sectionItemMotion(index)}>
-              <Card className="grid gap-5 rounded-[30px] p-6 md:grid-cols-[140px_1fr] md:items-start md:p-7">
-                <p className="text-sm uppercase tracking-[0.22em] text-cyan-400/72">{item.year}</p>
+              <Card className="grid gap-4 rounded-[28px] p-6 sm:rounded-[30px] md:grid-cols-[112px_1fr] md:items-start md:gap-5 md:p-7">
+                <div className="space-y-2">
+                  <p className="text-sm uppercase tracking-[0.22em] text-cyan-400/72">{item.year}</p>
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-[#7f8cab]">
+                    {item.eyebrow}
+                  </p>
+                </div>
                 <div>
                   <h3 className="theme-text text-xl font-medium">{item.title}</h3>
-                  <p className="theme-muted mt-3 text-sm leading-7">{item.summary}</p>
+                  <p className="theme-muted mt-3 max-w-2xl text-sm leading-7">{item.summary}</p>
                 </div>
               </Card>
             </motion.div>

@@ -12,19 +12,19 @@ import { sectionHeadingMotion, sectionItemMotion } from "./sectionMotion";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="relative py-24 sm:py-28">
+    <section id="contact" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
         <motion.div {...sectionHeadingMotion}>
-          <Card className="rounded-[36px] p-6 sm:p-8 lg:p-10">
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <Card className="rounded-[32px] p-6 sm:rounded-[36px] sm:p-8 lg:p-10">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
               <motion.div {...sectionItemMotion()}>
                 <p className="mb-3 text-sm uppercase tracking-[0.24em] text-cyan-400/72">Contact</p>
                 <h2 className="theme-text max-w-xl text-3xl font-semibold tracking-tight sm:text-5xl">
                   Let&apos;s build something with depth, clarity, and intent.
                 </h2>
                 <p className="theme-muted mt-5 max-w-xl text-sm leading-7">
-                  {siteContent.availability} If you have a launch, product refresh, or interactive concept
-                  that needs strong execution, I&apos;m interested.
+                  {siteContent.availability} If you have a launch, redesign, or motion-led interface that needs
+                  sharp execution, I&apos;m interested.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -34,8 +34,8 @@ export function ContactSection() {
                       <a
                         key={item.label}
                         href={item.href}
-                        target="_blank"
-                        rel="noreferrer"
+                        target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                        rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"}
                         className="theme-chip theme-border theme-soft theme-interactive inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
                       >
                         <Icon className="size-4" />
@@ -67,12 +67,12 @@ export function ContactSection() {
                   Project
                   <textarea
                     rows={5}
-                    placeholder="A short brief, timeline, and what you want to build."
+                    placeholder="Share the brief, timeline, scope, and what kind of experience you want to ship."
                     className="theme-chip theme-border theme-text rounded-[24px] border px-4 py-3 outline-none placeholder:text-[var(--subtle-text)] focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)]"
                   />
                 </label>
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <Button type="submit" magnetic>
+                  <Button type="submit" magnetic className="min-w-[10rem]">
                     Send inquiry
                   </Button>
                   <a
