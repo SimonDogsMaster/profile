@@ -501,6 +501,9 @@ export function ParticleGalaxyScene({
     );
     const pointerStrength = Math.hypot(pointer.x, pointer.y);
     const interactionActive = !reducedMotion && pointerStrength > 0.02;
+    const pointerInfluence = reducedMotion
+      ? 0
+      : THREE.MathUtils.clamp(pointerStrength, 0, 1);
     const cameraZoom = THREE.MathUtils.clamp(
       (10 - state.camera.position.z) / 3.1,
       0,
@@ -527,13 +530,13 @@ export function ParticleGalaxyScene({
     if (starfieldRef.current) {
       starfieldRef.current.rotation.z = THREE.MathUtils.lerp(
         starfieldRef.current.rotation.z,
-        0,
-        0.02,
+        reducedMotion ? 0 : pointer.x * 0.05,
+        0.03,
       );
       starfieldRef.current.rotation.x = THREE.MathUtils.lerp(
         starfieldRef.current.rotation.x,
-        0,
-        0.02,
+        reducedMotion ? 0 : pointer.y * -0.034,
+        0.03,
       );
     }
 
@@ -570,12 +573,13 @@ export function ParticleGalaxyScene({
       colorAttribute.needsUpdate = true;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        (0.04 + cameraZoom * 0.014) * (0.9 + sectionEnergy * 0.08),
+        (0.04 + cameraZoom * 0.014) *
+          (0.9 + sectionEnergy * 0.08 + pointerInfluence * 0.04),
         0.05,
       );
       material.opacity = THREE.MathUtils.lerp(
         material.opacity,
-        0.62 * (0.88 + sectionEnergy * 0.12),
+        0.62 * (0.88 + sectionEnergy * 0.12 + pointerInfluence * 0.05),
         0.05,
       );
     }
@@ -875,15 +879,17 @@ export function ParticleGalaxyScene({
   });
 
   return (
-    <group ref={starfieldRef}>
-      <SpritePoints
-        pointSprite={pointSprite}
-        pointRef={starsRef}
-        positions={backgroundStars.positions}
-        colors={backgroundStars.colors}
-        size={0.042}
-        opacity={0.62}
-      />
+    <>
+      <group ref={starfieldRef}>
+        <SpritePoints
+          pointSprite={pointSprite}
+          pointRef={starsRef}
+          positions={backgroundStars.positions}
+          colors={backgroundStars.colors}
+          size={0.042}
+          opacity={0.62}
+        />
+      </group>
 
       <group
         ref={galaxyRef}
@@ -975,6 +981,6 @@ export function ParticleGalaxyScene({
           </group>
         </group>
       </group>
-    </group>
+    </>
   );
 }

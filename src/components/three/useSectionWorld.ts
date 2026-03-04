@@ -42,6 +42,8 @@ export function useSectionWorld(): SectionWorldState {
     scrollVelocity: 0
   });
   const velocityFrame = useRef<number | null>(null);
+  const pointerFrame = useRef<number | null>(null);
+  const pointerTarget = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     let lastScrollTop = window.scrollY || document.documentElement.scrollTop || 0;
@@ -99,20 +101,48 @@ export function useSectionWorld(): SectionWorldState {
       }));
     };
 
-    const onPointerMove = (event: PointerEvent) => {
-      const x = (event.clientX / window.innerWidth) * 2 - 1;
-      const y = (event.clientY / window.innerHeight) * 2 - 1;
+    const flushPointer = () => {
+      pointerFrame.current = null;
+      setState((current) => {
+        const { x, y } = pointerTarget.current;
+        if (current.pointer.x === x && current.pointer.y === y) {
+          return current;
+        }
 
-      setState((current) => ({
-        ...current,
-        pointer: { x, y }
-      }));
+        return {
+          ...current,
+          pointer: { x, y }
+        };
+      });
+    };
+
+    const schedulePointerUpdate = () => {
+      if (pointerFrame.current !== null) {
+        return;
+      }
+
+      pointerFrame.current = window.requestAnimationFrame(flushPointer);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      pointerTarget.current = {
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: (event.clientY / window.innerHeight) * 2 - 1
+      };
+      schedulePointerUpdate();
+    };
+
+    const resetPointer = () => {
+      pointerTarget.current = { x: 0, y: 0 };
+      schedulePointerUpdate();
     };
 
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", resetPointer);
+    window.addEventListener("blur", resetPointer);
 
     const decayVelocity = () => {
       setState((current) => {
@@ -138,8 +168,13 @@ export function useSectionWorld(): SectionWorldState {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", resetPointer);
+      window.removeEventListener("blur", resetPointer);
       if (velocityFrame.current !== null) {
         window.cancelAnimationFrame(velocityFrame.current);
+      }
+      if (pointerFrame.current !== null) {
+        window.cancelAnimationFrame(pointerFrame.current);
       }
     };
   }, []);
