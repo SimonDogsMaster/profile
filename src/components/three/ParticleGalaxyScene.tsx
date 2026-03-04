@@ -31,9 +31,9 @@ const sectionTargets: Record<
     cameraX: 0,
     cameraY: 0.08,
     cameraZ: 9.4,
-    galaxyX: 1.04,
-    galaxyY: 0.04,
-    galaxyScale: 0.84,
+    galaxyX: 1.08,
+    galaxyY: 0.02,
+    galaxyScale: 0.9,
     tiltX: 0.98,
     yawY: 0.14,
   },
@@ -51,9 +51,9 @@ const sectionTargets: Record<
     cameraX: 0.02,
     cameraY: 0.05,
     cameraZ: 8.35,
-    galaxyX: 1.26,
-    galaxyY: 0.08,
-    galaxyScale: 0.94,
+    galaxyX: 1.38,
+    galaxyY: -0.04,
+    galaxyScale: 0.88,
     tiltX: 0.98,
     yawY: 0.13,
   },
@@ -71,9 +71,9 @@ const sectionTargets: Record<
     cameraX: 0.03,
     cameraY: 0.03,
     cameraZ: 7.5,
-    galaxyX: 1.24,
-    galaxyY: 0.05,
-    galaxyScale: 1.16,
+    galaxyX: 1.38,
+    galaxyY: -0.08,
+    galaxyScale: 1.02,
     tiltX: 1,
     yawY: 0.15,
   },
@@ -81,9 +81,9 @@ const sectionTargets: Record<
     cameraX: 0.03,
     cameraY: 0.02,
     cameraZ: 7.35,
-    galaxyX: 1.28,
-    galaxyY: 0.04,
-    galaxyScale: 1.26,
+    galaxyX: 1.42,
+    galaxyY: -0.1,
+    galaxyScale: 1.08,
     tiltX: 1.12,
     yawY: 0.21,
   },
@@ -91,9 +91,9 @@ const sectionTargets: Record<
     cameraX: 0.04,
     cameraY: 0.01,
     cameraZ: 6.9,
-    galaxyX: 1.32,
-    galaxyY: 0.04,
-    galaxyScale: 1.36,
+    galaxyX: 1.56,
+    galaxyY: -0.16,
+    galaxyScale: 0.98,
     tiltX: 1.04,
     yawY: 0.17,
   },
@@ -101,9 +101,9 @@ const sectionTargets: Record<
     cameraX: 0.04,
     cameraY: 0,
     cameraZ: 6.7,
-    galaxyX: 1.42,
-    galaxyY: 0.1,
-    galaxyScale: 1.28,
+    galaxyX: 1.62,
+    galaxyY: -0.18,
+    galaxyScale: 0.92,
     tiltX: 1.08,
     yawY: 0.19,
   },
@@ -111,9 +111,9 @@ const sectionTargets: Record<
     cameraX: 0.04,
     cameraY: -0.01,
     cameraZ: 6.8,
-    galaxyX: 1.28,
-    galaxyY: 0.02,
-    galaxyScale: 1.36,
+    galaxyX: 1.58,
+    galaxyY: -0.18,
+    galaxyScale: 0.86,
     tiltX: 1.14,
     yawY: 0.22,
   },
@@ -428,11 +428,11 @@ export function ParticleGalaxyScene({
     [],
   );
   const galaxyDust = useMemo(
-    () => createGalaxyLayer(3600, 4, 12.6, 0.18, 0.034, 0.94, 0.08),
+    () => createGalaxyLayer(3000, 4, 12.6, 0.16, 0.032, 0.94, 0.08),
     [],
   );
-  const galaxyBulge = useMemo(() => createBulgeLayer(1800), []);
-  const galaxyCore = useMemo(() => createCoreLayer(1400), []);
+  const galaxyBulge = useMemo(() => createBulgeLayer(1500), []);
+  const galaxyCore = useMemo(() => createCoreLayer(1100), []);
   const armColors = useMemo(
     () => tintColors(galaxyArms.colors, "#ffd0ea", "#c084fc", 0.34),
     [galaxyArms.colors],
@@ -448,6 +448,14 @@ export function ParticleGalaxyScene({
 
   useFrame((state) => {
     const target = sectionTargets[activeSection] ?? sectionTargets.hero;
+    const sectionEnergy =
+      activeSection === "hero"
+        ? 1.08
+        : activeSection === "availability"
+          ? 1.02
+          : activeSection === "contact"
+            ? 0.72
+            : 0.9;
     const time = state.clock.getElapsedTime();
     const scrollKick = THREE.MathUtils.clamp(
       Math.abs(scrollVelocity) * 2.2,
@@ -523,17 +531,33 @@ export function ParticleGalaxyScene({
       colorAttribute.needsUpdate = true;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.04 + cameraZoom * 0.014,
+        (0.04 + cameraZoom * 0.014) * (0.9 + sectionEnergy * 0.08),
+        0.05,
+      );
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.62 * (0.88 + sectionEnergy * 0.12),
         0.05,
       );
     }
 
     if (galaxyRef.current) {
+      const sectionScaleBoost =
+        activeSection === "hero"
+          ? 0.02
+          : activeSection === "projects"
+            ? -0.04
+            : activeSection === "timeline"
+              ? -0.06
+              : activeSection === "contact"
+                ? -0.08
+                : 0;
       const targetScale =
         target.galaxyScale +
         scrollProgress * 0.004 +
         sectionProgress * 0.016 +
-        scrollKick * 0.012;
+        scrollKick * 0.012 +
+        sectionScaleBoost;
       const scale = THREE.MathUtils.lerp(
         galaxyRef.current.scale.x,
         targetScale,
@@ -630,50 +654,70 @@ export function ParticleGalaxyScene({
       const material = armsRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.032 + cameraZoom * 0.014,
+        (0.032 + cameraZoom * 0.014) * (0.92 + sectionEnergy * 0.1),
         0.06,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.88, 0.05);
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.82 * (0.86 + sectionEnergy * 0.16),
+        0.05,
+      );
     }
 
     if (outerArmsRef.current) {
       const material = outerArmsRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.024 + cameraZoom * 0.01,
+        (0.026 + cameraZoom * 0.011) * (0.92 + sectionEnergy * 0.1),
         0.06,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.56, 0.05);
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.58 * (0.86 + sectionEnergy * 0.16),
+        0.05,
+      );
     }
 
     if (dustRef.current) {
       const material = dustRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.011 + cameraZoom * 0.006,
+        (0.01 + cameraZoom * 0.005) * (0.88 + sectionEnergy * 0.08),
         0.06,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.14, 0.05);
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.09 * (0.8 + sectionEnergy * 0.14),
+        0.05,
+      );
     }
 
     if (bulgeRef.current) {
       const material = bulgeRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.02 + cameraZoom * 0.012,
+        (0.018 + cameraZoom * 0.01) * (0.9 + sectionEnergy * 0.08),
         0.07,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.34, 0.05);
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.22 * (0.82 + sectionEnergy * 0.14),
+        0.05,
+      );
     }
 
     if (coreRef.current) {
       const material = coreRef.current.material as THREE.PointsMaterial;
       material.size = THREE.MathUtils.lerp(
         material.size,
-        0.048 + cameraZoom * 0.016,
+        (0.04 + cameraZoom * 0.013) * (0.86 + sectionEnergy * 0.14),
         0.08,
       );
-      material.opacity = THREE.MathUtils.lerp(material.opacity, 0.82, 0.05);
+      material.opacity = THREE.MathUtils.lerp(
+        material.opacity,
+        0.58 * (0.8 + sectionEnergy * 0.18),
+        0.05,
+      );
     }
   });
 
@@ -685,7 +729,7 @@ export function ParticleGalaxyScene({
         positions={backgroundStars.positions}
         colors={backgroundStars.colors}
         size={0.042}
-        opacity={0.72}
+        opacity={0.62}
       />
 
       <group
@@ -701,7 +745,7 @@ export function ParticleGalaxyScene({
               positions={galaxyDust.positions}
               colors={dustColors}
               size={0.02}
-              opacity={0.14}
+              opacity={0.1}
             />
           </group>
 
@@ -710,8 +754,8 @@ export function ParticleGalaxyScene({
               pointSprite={pointSprite}
               positions={galaxyDust.positions}
               colors={dustColors}
-              size={0.016}
-              opacity={0.08}
+              size={0.014}
+              opacity={0.05}
             />
           </group>
 
@@ -727,11 +771,11 @@ export function ParticleGalaxyScene({
           <SpritePoints
             pointSprite={pointSprite}
             pointRef={outerArmsRef}
-            positions={galaxyOuterArms.positions}
-            colors={outerArmColors}
-            size={0.026}
-            opacity={0.56}
-          />
+              positions={galaxyOuterArms.positions}
+              colors={outerArmColors}
+              size={0.028}
+              opacity={0.64}
+            />
         </group>
 
           <group ref={bulgeGroupRef} rotation={[-0.08, 0.14, 0]} position={[0, 0, 0.12]}>
@@ -740,18 +784,26 @@ export function ParticleGalaxyScene({
               pointRef={bulgeRef}
               positions={galaxyBulge.positions}
               colors={galaxyBulge.colors}
-              size={0.022}
-              opacity={0.34}
+              size={0.02}
+              opacity={0.26}
             />
           </group>
 
           <group ref={coreGroupRef} position={[0, 0, 0.2]}>
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -0.04]}>
-              <planeGeometry args={[2.8, 2.8]} />
+              <planeGeometry args={[2.2, 2.2]} />
               <meshBasicMaterial
                 map={glowTexture ?? undefined}
                 transparent
-                opacity={0.18}
+                opacity={
+                  activeSection === "hero"
+                    ? 0.08
+                    : activeSection === "projects" || activeSection === "timeline"
+                      ? 0.02
+                      : activeSection === "contact"
+                        ? 0.01
+                        : 0.04
+                }
                 color="#ffd5ee"
                 blending={THREE.AdditiveBlending}
                 depthWrite={false}
@@ -763,8 +815,8 @@ export function ParticleGalaxyScene({
               pointRef={coreRef}
               positions={galaxyCore.positions}
               colors={galaxyCore.colors}
-              size={0.052}
-              opacity={0.82}
+              size={0.044}
+              opacity={0.58}
             />
           </group>
         </group>
