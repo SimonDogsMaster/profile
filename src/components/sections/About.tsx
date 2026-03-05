@@ -26,7 +26,7 @@ export function AboutSection() {
               <Card className="overflow-hidden rounded-[32px] p-0">
                 <div className="relative aspect-[4/4.15] sm:aspect-[4/4.5] lg:aspect-[4/4.8]">
                   <Image
-                    src="/simon.jpg"
+                    src="/simon-optimized.jpg"
                     alt="Portrait of Simon Riverman"
                     fill
                     sizes="(min-width: 1024px) 28vw, 100vw"

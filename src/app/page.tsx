@@ -14,6 +14,7 @@ import { MotionDNASection } from "@/components/sections/MotionDNA";
 import { ProcessSection } from "@/components/sections/Process";
 import { ProjectsSection } from "@/components/sections/Projects";
 import { SkillsSection } from "@/components/sections/Skills";
+import { SkillsProofSection } from "@/components/sections/SkillsProof";
 import { TimelineSection } from "@/components/sections/Timeline";
 import { GlobalExperienceCanvas } from "@/components/three/GlobalExperienceCanvas";
 
@@ -22,6 +23,7 @@ type ThemeMode = "dark" | "light";
 export default function HomePage() {
   const [commandOpen, setCommandOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>("dark");
+  const [showExperienceCanvas, setShowExperienceCanvas] = useState(false);
 
   useEffect(() => {
     const storedTheme = window.localStorage.getItem("portfolio-theme");
@@ -47,9 +49,24 @@ export default function HomePage() {
     window.localStorage.setItem("portfolio-theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    const mountCanvas = () => setShowExperienceCanvas(true);
+
+    const requestIdle = window.requestIdleCallback;
+    const cancelIdle = window.cancelIdleCallback;
+
+    if (requestIdle && cancelIdle) {
+      const idleId = requestIdle(mountCanvas, { timeout: 220 });
+      return () => cancelIdle(idleId);
+    }
+
+    const timeoutId = setTimeout(mountCanvas, 120);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   return (
     <>
-      <GlobalExperienceCanvas />
+      {showExperienceCanvas ? <GlobalExperienceCanvas /> : null}
       <Navbar
         theme={theme}
         onToggleTheme={() =>
@@ -63,6 +80,7 @@ export default function HomePage() {
         <AvailabilitySection />
         <AboutSection />
         <SkillsSection />
+        <SkillsProofSection />
         <ProcessSection />
         <ProjectsSection />
         <TimelineSection />

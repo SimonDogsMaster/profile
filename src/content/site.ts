@@ -228,6 +228,35 @@ export const siteContent = {
       ]
     }
   ],
+  credibility: {
+    eyebrow: "Delivery Signals",
+    title: "Selected engagements and measurable outcomes.",
+    summary:
+      "A quick evidence layer after the stack view, focused on work context and outcomes from shipped projects.",
+    engagements: [
+      {
+        name: "Signal OS",
+        scope: "Platform redesign, dashboard architecture, motion system",
+        year: "2026"
+      },
+      {
+        name: "Helium Commerce",
+        scope: "Launch storytelling, interactive front-end direction",
+        year: "2025"
+      },
+      {
+        name: "Atlas Labs",
+        scope: "Docs IA rebuild, search UX, component templates",
+        year: "2024"
+      }
+    ],
+    outcomes: [
+      "-31% bundle cost on platform surfaces",
+      "+23% conversion on launch flow",
+      "95+ Lighthouse score on production builds",
+      "-42% docs bounce with stronger navigation"
+    ]
+  },
   process: [
     {
       title: "Define",

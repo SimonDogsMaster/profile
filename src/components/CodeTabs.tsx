@@ -495,7 +495,7 @@ export function CodeTabs() {
 
   return (
     <motion.div
-      initial={reduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.985 }}
+      initial={reduceMotion ? undefined : { opacity: 1, y: 18, scale: 0.985 }}
       animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
       className="relative z-20 mx-auto w-full max-w-[92vw] sm:max-w-[88vw] xl:max-w-[720px] 2xl:max-w-[780px]"

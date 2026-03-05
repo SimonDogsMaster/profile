@@ -63,8 +63,13 @@ export function Button({
   }
 
   return (
-    <motion.button className={cn(sharedClasses, variantClasses[variant], className)} {...motionProps} {...props}>
-      {children}
-    </motion.button>
+    <motion.div {...motionProps}>
+      <button
+        className={cn(sharedClasses, variantClasses[variant], className)}
+        {...props}
+      >
+        {children}
+      </button>
+    </motion.div>
   );
 }

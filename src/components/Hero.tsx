@@ -100,7 +100,7 @@ export function Hero({ onOpenCommand }: { onOpenCommand: () => void }) {
       <Container className="relative">
         <div className="grid items-center gap-12 lg:gap-14 xl:grid-cols-[0.92fr_1.08fr] xl:gap-10">
           <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, y: 18 }}
+            initial={reduceMotion ? undefined : { opacity: 1, y: 18 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="relative z-10 lg:max-w-[40rem]"

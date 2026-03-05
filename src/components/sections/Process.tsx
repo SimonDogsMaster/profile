@@ -8,16 +8,13 @@ import { siteContent } from "@/content/site";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Container } from "../ui/Container";
-import { sectionHeadingMotion, sectionItemMotion } from "./sectionMotion";
+import { sectionItemMotion } from "./sectionMotion";
 
 export function ProcessSection() {
   return (
     <section id="process" className="relative py-20 sm:py-24 lg:py-28">
       <Container>
-        <motion.div
-          className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
-          {...sectionHeadingMotion}
-        >
+        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <div className="mb-4 flex items-center gap-3">
               <span className="system-label">Workflow / 04</span>
@@ -31,7 +28,7 @@ export function ProcessSection() {
           <p className="theme-muted max-w-md text-sm leading-7">
             The goal is not ceremony. It is enough structure for the work to feel sharp, aligned, and ready for production.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid gap-4 lg:grid-cols-3 lg:gap-5">
           {siteContent.process.map((step, index) => (
