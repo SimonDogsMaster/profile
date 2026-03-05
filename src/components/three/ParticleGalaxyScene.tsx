@@ -424,6 +424,10 @@ export function ParticleGalaxyScene({
   const cursorWorld = useMemo(() => new THREE.Vector3(), []);
   const worldQuaternion = useMemo(() => new THREE.Quaternion(), []);
   const raycaster = useMemo(() => new THREE.Raycaster(), []);
+  const starTwinkleTimer = useRef(0);
+  const repulsionTimer = useRef(0);
+  const pointerRaycastTimer = useRef(0);
+  const hasParticleMomentum = useRef(false);
 
   const pointSprite = useMemo(() => createPointSprite(), []);
   const glowTexture = useMemo(() => createGlowTexture(), []);
@@ -483,7 +487,9 @@ export function ParticleGalaxyScene({
     [galaxyDust.colors],
   );
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
+    const clampedDelta = Math.min(delta, 1 / 20);
+    const frameScale = clampedDelta * 60;
     const target = sectionTargets[activeSection] ?? sectionTargets.hero;
     const sectionEnergy =
       activeSection === "hero"
@@ -540,37 +546,43 @@ export function ParticleGalaxyScene({
       );
     }
 
+    starTwinkleTimer.current += clampedDelta;
+    const shouldUpdateTwinkle = starTwinkleTimer.current >= 1 / 28;
+
     if (starsRef.current) {
       const material = starsRef.current.material as THREE.PointsMaterial;
-      const colorAttribute = starsRef.current.geometry.attributes
-        .color as THREE.BufferAttribute;
-      const values = colorAttribute.array as Float32Array;
+      if (shouldUpdateTwinkle) {
+        const colorAttribute = starsRef.current.geometry.attributes
+          .color as THREE.BufferAttribute;
+        const values = colorAttribute.array as Float32Array;
 
-      for (let index = 0; index < backgroundStars.phases.length; index += 1) {
-        const stride = index * 3;
-        const burst =
-          backgroundStars.highlights[index] > 0
-            ? Math.pow(
-                Math.max(0, Math.sin(time * 2 + backgroundStars.phases[index])),
-                8,
-              ) * 0.55
-            : 0;
-        const twinkle =
-          0.4 +
-          Math.sin(
-            time * (0.42 + backgroundStars.scales[index] * 0.5) +
-              backgroundStars.phases[index],
-          ) *
-            0.16 *
-            backgroundStars.scales[index];
-        const brightness = THREE.MathUtils.clamp(twinkle + burst, 0.12, 1.15);
+        for (let index = 0; index < backgroundStars.phases.length; index += 1) {
+          const stride = index * 3;
+          const burst =
+            backgroundStars.highlights[index] > 0
+              ? Math.pow(
+                  Math.max(0, Math.sin(time * 2 + backgroundStars.phases[index])),
+                  8,
+                ) * 0.55
+              : 0;
+          const twinkle =
+            0.4 +
+            Math.sin(
+              time * (0.42 + backgroundStars.scales[index] * 0.5) +
+                backgroundStars.phases[index],
+            ) *
+              0.16 *
+              backgroundStars.scales[index];
+          const brightness = THREE.MathUtils.clamp(twinkle + burst, 0.12, 1.15);
 
-        values[stride] = brightness;
-        values[stride + 1] = brightness * 0.98;
-        values[stride + 2] = brightness;
+          values[stride] = brightness;
+          values[stride + 1] = brightness * 0.98;
+          values[stride + 2] = brightness;
+        }
+
+        colorAttribute.needsUpdate = true;
+        starTwinkleTimer.current = 0;
       }
-
-      colorAttribute.needsUpdate = true;
       material.size = THREE.MathUtils.lerp(
         material.size,
         (0.04 + cameraZoom * 0.014) *
@@ -638,7 +650,7 @@ export function ParticleGalaxyScene({
     if (discRef.current) {
       discRef.current.rotation.y += reducedMotion
         ? 0
-        : 0.00056 + scrollKick * 0.00012;
+        : (0.00056 + scrollKick * 0.00012) * frameScale;
       discRef.current.rotation.x = THREE.MathUtils.lerp(
         discRef.current.rotation.x,
         0.04,
@@ -647,11 +659,11 @@ export function ParticleGalaxyScene({
     }
 
     if (armsGroupRef.current) {
-      armsGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00078;
+      armsGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00078 * frameScale;
     }
 
     if (dustGroupRef.current) {
-      dustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00034;
+      dustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00034 * frameScale;
       dustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         dustGroupRef.current.rotation.x,
         0.12 + Math.sin(time * 0.22) * 0.02,
@@ -660,7 +672,7 @@ export function ParticleGalaxyScene({
     }
 
     if (frontDustGroupRef.current) {
-      frontDustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00048;
+      frontDustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00048 * frameScale;
       frontDustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         frontDustGroupRef.current.rotation.x,
         -0.1 + Math.sin(time * 0.24) * 0.03,
@@ -674,7 +686,7 @@ export function ParticleGalaxyScene({
     }
 
     if (bulgeGroupRef.current) {
-      bulgeGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00044;
+      bulgeGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00044 * frameScale;
       bulgeGroupRef.current.position.z = THREE.MathUtils.lerp(
         bulgeGroupRef.current.position.z,
         Math.sin(time * 0.35) * 0.08,
@@ -683,7 +695,7 @@ export function ParticleGalaxyScene({
     }
 
     if (coreGroupRef.current) {
-      coreGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00062;
+      coreGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00062 * frameScale;
       coreGroupRef.current.position.z = THREE.MathUtils.lerp(
         coreGroupRef.current.position.z,
         Math.sin(time * 0.4) * 0.05,
@@ -772,13 +784,14 @@ export function ParticleGalaxyScene({
       depthInfluence: number,
     ) => {
       if (!points) {
-        return;
+        return false;
       }
 
       const positionAttribute = points.geometry.attributes
         .position as THREE.BufferAttribute;
       const positions = positionAttribute.array as Float32Array;
       const radiusSq = radius * radius;
+      let hasMovement = false;
 
       for (let index = 0; index < positions.length; index += 3) {
         const baseX = basePositions[index];
@@ -826,56 +839,88 @@ export function ParticleGalaxyScene({
         velocity[index] = velocityX;
         velocity[index + 1] = velocityY;
         velocity[index + 2] = velocityZ;
+
+        if (
+          Math.abs(velocityX) > 0.00045 ||
+          Math.abs(velocityY) > 0.00045 ||
+          Math.abs(velocityZ) > 0.00045 ||
+          Math.abs(currentX - baseX) > 0.0012 ||
+          Math.abs(currentY - baseY) > 0.0012 ||
+          Math.abs(currentZ - baseZ) > 0.0012
+        ) {
+          hasMovement = true;
+        }
       }
 
       positionAttribute.needsUpdate = true;
+      return hasMovement;
     };
 
-    if (interactionActive && discRef.current) {
-      planeNormal.set(0, 1, 0).applyQuaternion(discRef.current.getWorldQuaternion(worldQuaternion));
-      planePoint.setFromMatrixPosition(discRef.current.matrixWorld);
-      interactionPlane.setFromNormalAndCoplanarPoint(planeNormal, planePoint);
-      pointerVector.set(pointer.x, pointer.y);
-      raycaster.setFromCamera(pointerVector, state.camera);
+    pointerRaycastTimer.current += clampedDelta;
+    const shouldUpdateRaycast = pointerRaycastTimer.current >= (interactionActive ? 1 / 48 : 1 / 30);
 
-      if (raycaster.ray.intersectPlane(interactionPlane, cursorWorld)) {
-        cursorLocal.copy(cursorWorld);
-        discRef.current.worldToLocal(cursorLocal);
+    if (interactionActive && discRef.current) {
+      if (shouldUpdateRaycast) {
+        planeNormal.set(0, 1, 0).applyQuaternion(
+          discRef.current.getWorldQuaternion(worldQuaternion),
+        );
+        planePoint.setFromMatrixPosition(discRef.current.matrixWorld);
+        interactionPlane.setFromNormalAndCoplanarPoint(planeNormal, planePoint);
+        pointerVector.set(pointer.x, pointer.y);
+        raycaster.setFromCamera(pointerVector, state.camera);
+
+        if (raycaster.ray.intersectPlane(interactionPlane, cursorWorld)) {
+          cursorLocal.copy(cursorWorld);
+          discRef.current.worldToLocal(cursorLocal);
+        }
+
+        pointerRaycastTimer.current = 0;
       }
     } else {
       cursorLocal.set(999, 999, 999);
     }
 
-    applyRepulsion(
-      outerArmsRef.current,
-      outerArmsBasePositions,
-      outerArmsVelocity,
-      1.9,
-      0.048,
-      0.018,
-      0.84,
-      0.5,
-    );
-    applyRepulsion(
-      dustRef.current,
-      dustBasePositions,
-      dustVelocity,
-      1.65,
-      0.032,
-      0.014,
-      0.82,
-      0.42,
-    );
-    applyRepulsion(
-      frontDustRef.current,
-      dustBasePositions,
-      frontDustVelocity,
-      1.85,
-      0.038,
-      0.015,
-      0.8,
-      0.48,
-    );
+    repulsionTimer.current += clampedDelta;
+    const shouldUpdateRepulsion =
+      repulsionTimer.current >= (interactionActive ? 1 / 45 : 1 / 24) &&
+      (interactionActive || hasParticleMomentum.current);
+
+    if (shouldUpdateRepulsion) {
+      const outerMoving = applyRepulsion(
+        outerArmsRef.current,
+        outerArmsBasePositions,
+        outerArmsVelocity,
+        1.9,
+        0.048,
+        0.018,
+        0.84,
+        0.5,
+      );
+      const dustMoving = applyRepulsion(
+        dustRef.current,
+        dustBasePositions,
+        dustVelocity,
+        1.65,
+        0.032,
+        0.014,
+        0.82,
+        0.42,
+      );
+      const frontDustMoving = applyRepulsion(
+        frontDustRef.current,
+        dustBasePositions,
+        frontDustVelocity,
+        1.85,
+        0.038,
+        0.015,
+        0.8,
+        0.48,
+      );
+
+      hasParticleMomentum.current =
+        interactionActive || outerMoving || dustMoving || frontDustMoving;
+      repulsionTimer.current = 0;
+    }
   });
 
   return (
