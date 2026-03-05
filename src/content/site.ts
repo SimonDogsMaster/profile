@@ -66,6 +66,112 @@ export const siteContent = {
       items: ["Performance", "Component Architecture", "CMS Integrations", "Analytics", "Experimentation"]
     }
   ],
+  stackIcons: [
+    {
+      name: "Bootstrap",
+      short: "Bs",
+      category: "Framework",
+      iconPath: "/icons/tech/bootstrap.svg",
+      accent: "#a78bfa",
+      glow: "rgba(167, 139, 250, 0.2)"
+    },
+    {
+      name: "Tailwind CSS",
+      short: "Tw",
+      category: "CSS",
+      iconPath: "/icons/tech/tailwindcss.svg",
+      accent: "#22d3ee",
+      glow: "rgba(34, 211, 238, 0.22)"
+    },
+    {
+      name: "MUI UI",
+      short: "Mu",
+      category: "UI Kit",
+      iconPath: "/icons/tech/mui.svg",
+      accent: "#60a5fa",
+      glow: "rgba(96, 165, 250, 0.2)"
+    },
+    {
+      name: "Material UI",
+      short: "Md",
+      category: "UI Kit",
+      iconPath: "/icons/tech/materialdesign.svg",
+      accent: "#38bdf8",
+      glow: "rgba(56, 189, 248, 0.2)"
+    },
+    {
+      name: "Angular",
+      short: "Ng",
+      category: "Framework",
+      iconPath: "/icons/tech/angular.svg",
+      accent: "#dd0031",
+      glow: "rgba(221, 0, 49, 0.22)"
+    },
+    {
+      name: "Ruby",
+      short: "Rb",
+      category: "Language",
+      iconPath: "/icons/tech/ruby.svg",
+      accent: "#ef4444",
+      glow: "rgba(239, 68, 68, 0.2)"
+    },
+    {
+      name: "Laravel",
+      short: "Lv",
+      category: "Framework",
+      iconPath: "/icons/tech/laravel.svg",
+      accent: "#ff2d20",
+      glow: "rgba(255, 45, 32, 0.2)"
+    },
+    {
+      name: "JavaScript",
+      short: "JS",
+      category: "Language",
+      iconPath: "/icons/tech/javascript.svg",
+      accent: "#facc15",
+      glow: "rgba(250, 204, 21, 0.22)"
+    },
+    {
+      name: "TypeScript",
+      short: "TS",
+      category: "Language",
+      iconPath: undefined,
+      accent: "#38bdf8",
+      glow: "rgba(56, 189, 248, 0.22)"
+    },
+    {
+      name: "Electron",
+      short: "El",
+      category: "Desktop",
+      iconPath: "/icons/tech/electron.svg",
+      accent: "#67e8f9",
+      glow: "rgba(103, 232, 249, 0.22)"
+    },
+    {
+      name: "Next.js",
+      short: "Nx",
+      category: "Framework",
+      iconPath: "/icons/tech/nextdotjs.svg",
+      accent: "#cbd5e1",
+      glow: "rgba(203, 213, 225, 0.18)"
+    },
+    {
+      name: "Vue.js",
+      short: "Vu",
+      category: "Framework",
+      iconPath: "/icons/tech/vuedotjs.svg",
+      accent: "#34d399",
+      glow: "rgba(52, 211, 153, 0.22)"
+    },
+    {
+      name: "Prisma",
+      short: "Pr",
+      category: "ORM",
+      iconPath: "/icons/tech/prisma.svg",
+      accent: "#a78bfa",
+      glow: "rgba(167, 139, 250, 0.22)"
+    }
+  ],
   projects: [
     {
       slug: "signal-os",
