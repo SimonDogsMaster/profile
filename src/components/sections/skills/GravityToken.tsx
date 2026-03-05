@@ -6,6 +6,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { MouseEvent } from "react";
 
 import { SkillGlyph } from "./SkillGlyph";
 import { PointerPosition, StackIcon } from "./types";
@@ -35,6 +36,11 @@ type GravityTokenProps = {
   index: number;
   anchor: { x: number; y: number };
   pointer: PointerPosition;
+  isActive: boolean;
+  isPinned: boolean;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
+  onTogglePin: () => void;
 };
 
 export function GravityToken({
@@ -42,6 +48,11 @@ export function GravityToken({
   index,
   anchor,
   pointer,
+  isActive,
+  isPinned,
+  onHoverStart,
+  onHoverEnd,
+  onTogglePin,
 }: GravityTokenProps) {
   const reducedMotion = useReducedMotion();
   const translateX = useMotionValue(0);
@@ -69,7 +80,7 @@ export function GravityToken({
       translateY.set(0);
       rotate.set(0);
       scale.set(depth);
-      opacity.set(isTopOrbit ? 0.68 : 0.78 + depth * 0.08);
+      opacity.set(isTopOrbit ? 0.66 : 0.74 + depth * 0.08);
       return;
     }
 
@@ -88,9 +99,18 @@ export function GravityToken({
     let targetRotate = Math.sin(t * 0.5 + index) * 1.1;
     let targetScale = depth;
     let targetOpacity = (isTopOrbit ? 0.62 : 0.76) + depth * 0.1;
+    const chargeWave = (Math.sin(t * 0.86 - index * 0.55) + 1) * 0.5;
+    targetOpacity *= 0.72 + chargeWave * 0.28;
 
     if (isTopOrbit) {
       targetY -= 4;
+    }
+    if (isActive) {
+      const pullStrength = isPinned ? 0.16 : 0.09;
+      targetX += (50 - anchor.x) * pullStrength;
+      targetY += (57 - anchor.y) * pullStrength;
+      targetScale += isPinned ? 0.08 : 0.05;
+      targetOpacity = Math.min(0.97, targetOpacity + (isPinned ? 0.2 : 0.12));
     }
 
     if (pointer) {
@@ -103,9 +123,9 @@ export function GravityToken({
       targetY += deltaY * attraction * (0.2 + depth * 0.1) * tailDamping;
       targetRotate += deltaX * attraction * 0.045;
       targetScale = depth + attraction * 0.045;
-      targetOpacity = Math.min(0.94, 0.76 + depth * 0.1 + attraction * 0.08);
+      targetOpacity = Math.min(0.95, targetOpacity + attraction * 0.12);
       if (isTopOrbit) {
-        targetOpacity = Math.min(0.8, 0.64 + depth * 0.06 + attraction * 0.06);
+        targetOpacity = Math.min(0.82, targetOpacity + attraction * 0.08);
       }
 
       // Neighbor repulsion adds a soft "collision" feel when tokens gather around the cursor.
@@ -168,7 +188,7 @@ export function GravityToken({
 
   return (
     <motion.div
-      className="absolute left-0 top-0 hidden w-[170px] -translate-x-1/2 -translate-y-1/2 md:block lg:w-[186px] xl:w-[198px]"
+      className="absolute left-0 top-0 hidden w-[148px] -translate-x-1/2 -translate-y-1/2 md:block lg:w-[162px] xl:w-[174px]"
       style={{
         left: `${anchor.x}%`,
         top: `${anchor.y}%`,
@@ -187,25 +207,43 @@ export function GravityToken({
         delay: index * 0.05,
         ease: [0.22, 1, 0.36, 1],
       }}
-      whileHover={{ scale: reducedMotion ? 1 : 1.02, y: reducedMotion ? 0 : -1.25 }}
+      whileHover={{ scale: reducedMotion ? 1 : 1.03, y: reducedMotion ? 0 : -1.8 }}
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+      onClick={(event: MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation();
+        onTogglePin();
+      }}
     >
-      <div className="theme-chip theme-border relative overflow-hidden rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(15,20,45,0.86),rgba(8,12,28,0.82))] p-2.5 backdrop-blur-lg lg:p-3">
+      <div
+        className="theme-chip theme-border relative overflow-hidden rounded-[18px] border p-2 backdrop-blur-lg lg:p-2.5"
+        style={{
+          borderColor: isActive
+            ? `color-mix(in srgb, ${item.accent} 58%, rgba(226,232,240,0.46))`
+            : "rgba(255,255,255,0.1)",
+          background: isActive
+            ? "linear-gradient(180deg, rgba(18,25,52,0.96), rgba(10,14,32,0.92))"
+            : "linear-gradient(180deg, rgba(15,20,45,0.86), rgba(8,12,28,0.82))",
+        }}
+      >
         <div
-          className="pointer-events-none absolute inset-y-3 left-1 w-[2px] rounded-full opacity-65"
+          className="pointer-events-none absolute inset-y-3 left-1 w-[2px] rounded-full"
           style={{
             background: `linear-gradient(180deg, transparent, ${item.accent}, transparent)`,
+            opacity: isActive ? 0.92 : 0.65,
           }}
         />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-6 bg-[linear-gradient(180deg,rgba(148,163,184,0.08),transparent)]" />
-        <div className="pointer-events-none absolute left-2.5 top-2.5 h-3 w-3 border-l border-t border-white/8" />
-        <div className="pointer-events-none absolute bottom-2.5 right-2.5 h-3 w-3 border-b border-r border-white/8" />
-        <div className="pointer-events-none absolute right-2.5 top-2.5 inline-flex items-center rounded-full border border-white/8 bg-white/[0.03] px-1.5 py-0.5 text-[8px] uppercase tracking-[0.18em] text-white/28">
+        <div className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t border-white/8" />
+        <div className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r border-white/8" />
+        <div className="pointer-events-none absolute right-2 top-2 inline-flex items-center rounded-full border border-white/8 bg-white/[0.03] px-1.5 py-0.5 text-[7px] uppercase tracking-[0.17em] text-white/28">
           N{String(index + 1).padStart(2, "0")}
         </div>
         <div
-          className="pointer-events-none absolute inset-0 opacity-38"
+          className="pointer-events-none absolute inset-0"
           style={{
             background: `radial-gradient(circle at 16% 20%, ${item.glow}, transparent 32%), linear-gradient(90deg, transparent, color-mix(in srgb, ${item.accent} 12%, transparent), transparent)`,
+            opacity: isActive ? 0.55 : 0.38,
           }}
         />
         <div
@@ -220,8 +258,8 @@ export function GravityToken({
             background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${item.accent} 78%, white 10%), transparent)`,
           }}
         />
-        <div className="relative flex items-center gap-2.5">
-          <div className="origin-left scale-[0.9]">
+        <div className="relative flex items-center gap-2">
+          <div className="origin-left scale-[0.82]">
             <SkillGlyph
               name={item.name}
               short={item.short}
@@ -230,20 +268,20 @@ export function GravityToken({
               iconPath={item.iconPath}
             />
           </div>
-          <div className="min-w-0 flex-1 pr-8">
-            <p className="theme-text whitespace-nowrap text-[0.94rem] font-semibold tracking-[-0.01em] lg:text-[0.98rem]">
+          <div className="min-w-0 flex-1 pr-7">
+            <p className="theme-text whitespace-nowrap text-[0.84rem] font-semibold tracking-[-0.01em] lg:text-[0.9rem]">
               {item.name}
             </p>
-            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5">
+            <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] px-1.5 py-0.5">
               <span
-                className="h-1.5 w-1.5 rounded-full"
+                className="h-1 w-1 rounded-full"
                 style={{ backgroundColor: item.accent }}
               />
-              <p className="theme-muted text-[9px] uppercase tracking-[0.22em] text-white/64">
+              <p className="theme-muted text-[8px] uppercase tracking-[0.2em] text-white/64">
                 {item.category}
               </p>
             </div>
-            <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white/8">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
               <motion.div
                 className="h-full rounded-full shadow-[0_0_14px_rgba(125,211,252,0.25)]"
                 style={{
@@ -258,7 +296,7 @@ export function GravityToken({
                 }}
               />
             </div>
-            <div className="mt-1.5 flex items-center gap-2 text-[8px] uppercase tracking-[0.17em] text-white/20">
+            <div className="mt-1.5 flex items-center gap-2 text-[7px] uppercase tracking-[0.15em] text-white/20">
               <span>Link Stable</span>
               <span className="h-px flex-1 bg-white/7" />
             </div>

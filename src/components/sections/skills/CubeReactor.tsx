@@ -1,10 +1,30 @@
 import { motion } from "framer-motion";
 
-export function CubeReactor() {
+type CubeReactorProps = {
+  energyColor?: string | null;
+  isActive?: boolean;
+};
+
+const DEFAULT_ENERGY_COLOR = "#67e8f9";
+
+export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps) {
+  const tone = energyColor ?? DEFAULT_ENERGY_COLOR;
+  const shellOpacity = isActive ? [0.68, 0.9, 1, 0.76] : [0.72, 0.92, 1, 0.8];
+  const cloudOpacity = isActive ? [0.52, 0.86, 0.52] : [0.42, 0.72, 0.42];
+
   return (
-    <div className="absolute left-1/2 top-[57%] h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 opacity-90">
+    <motion.div
+      className="absolute left-1/2 top-[57%] h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2"
+      animate={{ opacity: [0.72, 0.92, 1, 0.8] }}
+      transition={{
+        duration: 8.2,
+        repeat: Number.POSITIVE_INFINITY,
+        ease: "easeInOut",
+      }}
+    >
       <motion.div
-        className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/18 blur-3xl"
+        className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{ backgroundColor: tone }}
         animate={{ opacity: [0.35, 0.62, 0.35], scale: [0.9, 1.06, 0.92] }}
         transition={{
           duration: 6.6,
@@ -20,30 +40,30 @@ export function CubeReactor() {
         <defs>
           <linearGradient id="cubeEdge" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="rgba(220,248,255,0.96)" />
-            <stop offset="52%" stopColor="rgba(103,232,249,0.9)" />
-            <stop offset="100%" stopColor="rgba(56,189,248,0.72)" />
+            <stop offset="52%" stopColor={tone} stopOpacity="0.9" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0.72" />
           </linearGradient>
           <linearGradient id="cubeTopFace" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="rgba(190,240,255,0.45)" />
-            <stop offset="100%" stopColor="rgba(56,189,248,0.2)" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0.24" />
           </linearGradient>
           <linearGradient id="cubeLeftFace" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(112,211,252,0.25)" />
-            <stop offset="100%" stopColor="rgba(56,189,248,0.1)" />
+            <stop offset="0%" stopColor={tone} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0.12" />
           </linearGradient>
           <linearGradient id="cubeRightFace" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="rgba(186,230,253,0.28)" />
-            <stop offset="100%" stopColor="rgba(14,116,144,0.09)" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0.1" />
           </linearGradient>
           <radialGradient id="cubeEnergyCloud" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="rgba(244,252,255,0.92)" />
-            <stop offset="36%" stopColor="rgba(165,232,255,0.52)" />
-            <stop offset="100%" stopColor="rgba(103,232,249,0)" />
+            <stop offset="36%" stopColor={tone} stopOpacity="0.52" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0" />
           </radialGradient>
           <radialGradient id="cubeCoreGlow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="rgba(236, 249, 255, 0.96)" />
-            <stop offset="34%" stopColor="rgba(147, 226, 255, 0.42)" />
-            <stop offset="100%" stopColor="rgba(103, 232, 249, 0)" />
+            <stop offset="34%" stopColor={tone} stopOpacity="0.42" />
+            <stop offset="100%" stopColor={tone} stopOpacity="0" />
           </radialGradient>
           <filter id="cubeGlow">
             <feGaussianBlur stdDeviation="2.2" result="blur" />
@@ -83,7 +103,15 @@ export function CubeReactor() {
           strokeDasharray="4 11"
         />
 
-        <g filter="url(#cubeGlow)">
+        <motion.g
+          filter="url(#cubeGlow)"
+          animate={{ opacity: shellOpacity }}
+          transition={{
+            duration: 8.2,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
           <polygon
             points="96,84 160,58 224,84 160,110"
             fill="url(#cubeTopFace)"
@@ -128,9 +156,9 @@ export function CubeReactor() {
             stroke="rgba(186,230,253,0.22)"
             strokeWidth="1"
           />
-        </g>
+        </motion.g>
         <motion.g
-          animate={{ opacity: [0.42, 0.72, 0.42] }}
+          animate={{ opacity: cloudOpacity }}
           transition={{
             duration: 4.8,
             repeat: Number.POSITIVE_INFINITY,
@@ -170,7 +198,8 @@ export function CubeReactor() {
         <motion.path
           d="M96 84 L96 152 L160 178 L224 152 L224 84"
           fill="none"
-          stroke="rgba(103,232,249,0.85)"
+          stroke={tone}
+          strokeOpacity="0.85"
           strokeWidth="1.7"
           strokeLinecap="round"
           strokeDasharray="16 260"
@@ -201,7 +230,8 @@ export function CubeReactor() {
           rx="138"
           ry="92"
           fill="none"
-          stroke="rgba(125,211,252,0.34)"
+          stroke={tone}
+          strokeOpacity="0.34"
           strokeWidth="1"
           animate={{ opacity: [0.18, 0.42, 0.18] }}
           transition={{
@@ -232,6 +262,6 @@ export function CubeReactor() {
           strokeWidth="1"
         />
       </svg>
-    </div>
+    </motion.div>
   );
 }
