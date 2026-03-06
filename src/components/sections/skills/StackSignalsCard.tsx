@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { PointerEvent, RefObject, useEffect, useState } from "react";
+import { type CSSProperties, PointerEvent, RefObject, useEffect, useState } from "react";
 
 import { siteContent } from "@/content/site";
 
@@ -236,13 +236,13 @@ export function StackSignalsCard({
                       strokeDasharray="5 12"
                     className="stack-route-flow"
                     style={{
-                        animationDuration: `${8.2 + (index % 4) * 0.45}s, 3.4s`,
+                        "--stack-route-duration": `${8.2 + (index % 4) * 0.45}s`,
                         opacity: activeRoute
                           ? activeRoute.from === route.from
                             ? 0.5
                             : 0.1
                           : 0.32,
-                      }}
+                      } as CSSProperties}
                     />
                   ) : (
                     <motion.path
@@ -452,13 +452,13 @@ export function StackSignalsCard({
                     strokeDasharray="5 12"
                     className="stack-route-flow"
                     style={{
-                      animationDuration: `${8 + (index % 4) * 0.42}s, 3.4s`,
+                      "--stack-route-duration": `${8 + (index % 4) * 0.42}s`,
                       opacity: activeRoute
                         ? activeRoute.from === route.from
                           ? 0.52
                           : 0.1
                         : 0.34,
-                    }}
+                    } as CSSProperties}
                   />
                 ) : (
                   <motion.path

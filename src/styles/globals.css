@@ -249,7 +249,7 @@ textarea {
 
 .stack-route-flow {
   animation-name: stack-route-flow, stack-route-fade;
-  animation-duration: 8s, 3.4s;
+  animation-duration: var(--stack-route-duration, 8s), 3.4s;
   animation-timing-function: linear, ease-in-out;
   animation-iteration-count: infinite, infinite;
 }
@@ -284,5 +284,11 @@ textarea {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .stack-route-flow {
+    animation-duration: var(--stack-route-duration, 8s), 3.4s !important;
+    animation-iteration-count: infinite, infinite !important;
+    animation-timing-function: linear, ease-in-out !important;
   }
 }
