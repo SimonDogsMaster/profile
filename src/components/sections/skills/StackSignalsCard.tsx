@@ -518,6 +518,7 @@ export function StackSignalsCard({
               pointer={pointer}
               isActive={activeIndex === index}
               isPinned={pinnedIndex === index}
+              forceInteractiveMotion={stableMotionMode}
               onHoverStart={() => setHoveredIndex(index)}
               onHoverEnd={() => setHoveredIndex((prev) => (prev === index ? null : prev))}
               onTogglePin={() =>

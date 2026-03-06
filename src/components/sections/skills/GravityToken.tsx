@@ -38,6 +38,7 @@ type GravityTokenProps = {
   pointer: PointerPosition;
   isActive: boolean;
   isPinned: boolean;
+  forceInteractiveMotion?: boolean;
   onHoverStart: () => void;
   onHoverEnd: () => void;
   onTogglePin: () => void;
@@ -50,11 +51,13 @@ export function GravityToken({
   pointer,
   isActive,
   isPinned,
+  forceInteractiveMotion = false,
   onHoverStart,
   onHoverEnd,
   onTogglePin,
 }: GravityTokenProps) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotionPreference = useReducedMotion();
+  const reducedMotion = reducedMotionPreference && !forceInteractiveMotion;
   const translateX = useMotionValue(0);
   const translateY = useMotionValue(0);
   const rotate = useMotionValue(0);
