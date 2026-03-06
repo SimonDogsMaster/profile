@@ -248,10 +248,10 @@ textarea {
 }
 
 .stack-route-flow {
-  animation-name: stack-route-flow, stack-route-fade;
-  animation-duration: var(--stack-route-duration, 8s), 3.4s;
-  animation-timing-function: linear, ease-in-out;
-  animation-iteration-count: infinite, infinite;
+  animation-name: stack-route-flow;
+  animation-duration: var(--stack-route-duration, 8s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 .stack-route-active-flow {
@@ -266,17 +266,7 @@ textarea {
     stroke-dashoffset: 0;
   }
   to {
-    stroke-dashoffset: -42;
-  }
-}
-
-@keyframes stack-route-fade {
-  0%,
-  100% {
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 0.52;
+    stroke-dashoffset: -34;
   }
 }
 
@@ -303,9 +293,9 @@ textarea {
   }
 
   .stack-route-flow {
-    animation-duration: var(--stack-route-duration, 8s), 3.4s !important;
-    animation-iteration-count: infinite, infinite !important;
-    animation-timing-function: linear, ease-in-out !important;
+    animation-duration: var(--stack-route-duration, 8s) !important;
+    animation-iteration-count: infinite !important;
+    animation-timing-function: linear !important;
   }
 
   .stack-route-active-flow {
