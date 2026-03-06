@@ -254,6 +254,13 @@ textarea {
   animation-iteration-count: infinite, infinite;
 }
 
+.stack-route-active-flow {
+  animation-name: stack-route-active-flow;
+  animation-duration: var(--stack-route-active-duration, 1.95s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
 @keyframes stack-route-flow {
   from {
     stroke-dashoffset: 0;
@@ -270,6 +277,15 @@ textarea {
   }
   50% {
     opacity: 0.52;
+  }
+}
+
+@keyframes stack-route-active-flow {
+  from {
+    stroke-dashoffset: 56;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -290,5 +306,11 @@ textarea {
     animation-duration: var(--stack-route-duration, 8s), 3.4s !important;
     animation-iteration-count: infinite, infinite !important;
     animation-timing-function: linear, ease-in-out !important;
+  }
+
+  .stack-route-active-flow {
+    animation-duration: var(--stack-route-active-duration, 1.95s) !important;
+    animation-iteration-count: infinite !important;
+    animation-timing-function: linear !important;
   }
 }

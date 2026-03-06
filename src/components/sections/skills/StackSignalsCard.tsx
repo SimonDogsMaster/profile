@@ -282,22 +282,41 @@ export function StackSignalsCard({
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                    <motion.path
-                      d={activeRoute.path}
-                      fill="none"
-                      stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
-                      strokeOpacity={activeAccent ? 0.95 : 1}
-                      strokeWidth="0.65"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeDasharray="12 40"
-                      animate={{ strokeDashoffset: [56, 0] }}
-                      transition={{
-                        duration: pinnedIndex !== null ? 1.55 : 1.95,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    />
+                    {preferStableMotion ? (
+                      <path
+                        d={activeRoute.path}
+                        fill="none"
+                        stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
+                        strokeOpacity={activeAccent ? 0.95 : 1}
+                        strokeWidth="0.65"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeDasharray="12 40"
+                        className="stack-route-active-flow"
+                        style={
+                          {
+                            "--stack-route-active-duration": pinnedIndex !== null ? "1.55s" : "1.95s",
+                          } as CSSProperties
+                        }
+                      />
+                    ) : (
+                      <motion.path
+                        d={activeRoute.path}
+                        fill="none"
+                        stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
+                        strokeOpacity={activeAccent ? 0.95 : 1}
+                        strokeWidth="0.65"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeDasharray="12 40"
+                        animate={{ strokeDashoffset: [56, 0] }}
+                        transition={{
+                          duration: pinnedIndex !== null ? 1.55 : 1.95,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                        }}
+                      />
+                    )}
                   </>
                 ) : null}
                 {coreRoutes.map((route) => (
@@ -498,22 +517,41 @@ export function StackSignalsCard({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                  <motion.path
-                    d={activeRoute.path}
-                    fill="none"
-                    stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
-                    strokeOpacity={activeAccent ? 0.95 : 1}
-                    strokeWidth="0.65"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeDasharray="12 40"
-                    animate={{ strokeDashoffset: [56, 0] }}
-                    transition={{
-                      duration: pinnedIndex !== null ? 1.55 : 1.95,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  />
+                  {preferStableMotion ? (
+                    <path
+                      d={activeRoute.path}
+                      fill="none"
+                      stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
+                      strokeOpacity={activeAccent ? 0.95 : 1}
+                      strokeWidth="0.65"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="12 40"
+                      className="stack-route-active-flow"
+                      style={
+                        {
+                          "--stack-route-active-duration": pinnedIndex !== null ? "1.55s" : "1.95s",
+                        } as CSSProperties
+                      }
+                    />
+                  ) : (
+                    <motion.path
+                      d={activeRoute.path}
+                      fill="none"
+                      stroke={activeAccent ?? "rgba(226,246,255,0.98)"}
+                      strokeOpacity={activeAccent ? 0.95 : 1}
+                      strokeWidth="0.65"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="12 40"
+                      animate={{ strokeDashoffset: [56, 0] }}
+                      transition={{
+                        duration: pinnedIndex !== null ? 1.55 : 1.95,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
+                    />
+                  )}
                 </>
               ) : null}
             </svg>
