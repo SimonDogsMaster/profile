@@ -3,32 +3,46 @@ import { motion } from "framer-motion";
 type CubeReactorProps = {
   energyColor?: string | null;
   isActive?: boolean;
+  preferStableMotion?: boolean;
 };
 
 const DEFAULT_ENERGY_COLOR = "#67e8f9";
 
-export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps) {
+export function CubeReactor({
+  energyColor,
+  isActive = false,
+  preferStableMotion = false,
+}: CubeReactorProps) {
   const tone = energyColor ?? DEFAULT_ENERGY_COLOR;
   const shellOpacity = isActive ? [0.68, 0.9, 1, 0.76] : [0.72, 0.92, 1, 0.8];
   const cloudOpacity = isActive ? [0.52, 0.86, 0.52] : [0.42, 0.72, 0.42];
 
   return (
     <motion.div
-      className="absolute left-1/2 top-[57%] h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2"
-      animate={{ opacity: [0.72, 0.92, 1, 0.8] }}
+      className="absolute left-1/2 top-[57%] h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 transform-gpu"
+      style={{ willChange: "transform, opacity" }}
+      animate={
+        preferStableMotion
+          ? { opacity: 0.9 }
+          : { opacity: [0.72, 0.92, 1, 0.8] }
+      }
       transition={{
-        duration: 8.2,
-        repeat: Number.POSITIVE_INFINITY,
+        duration: preferStableMotion ? 0.2 : 8.2,
+        repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
         ease: "easeInOut",
       }}
     >
       <motion.div
         className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{ backgroundColor: tone }}
-        animate={{ opacity: [0.35, 0.62, 0.35], scale: [0.9, 1.06, 0.92] }}
+        animate={
+          preferStableMotion
+            ? { opacity: isActive ? 0.48 : 0.4, scale: isActive ? 1.02 : 0.98 }
+            : { opacity: [0.35, 0.62, 0.35], scale: [0.9, 1.06, 0.92] }
+        }
         transition={{
-          duration: 6.6,
-          repeat: Number.POSITIVE_INFINITY,
+          duration: preferStableMotion ? 0.2 : 6.6,
+          repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
           ease: "easeInOut",
         }}
       />
@@ -51,7 +65,13 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
             <stop offset="0%" stopColor={tone} stopOpacity="0.3" />
             <stop offset="100%" stopColor={tone} stopOpacity="0.12" />
           </linearGradient>
-          <linearGradient id="cubeRightFace" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient
+            id="cubeRightFace"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
             <stop offset="0%" stopColor="rgba(186,230,253,0.28)" />
             <stop offset="100%" stopColor={tone} stopOpacity="0.1" />
           </linearGradient>
@@ -104,11 +124,15 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
         />
 
         <motion.g
-          filter="url(#cubeGlow)"
-          animate={{ opacity: shellOpacity }}
+          filter={preferStableMotion ? undefined : "url(#cubeGlow)"}
+          animate={
+            preferStableMotion
+              ? { opacity: isActive ? 0.9 : 0.84 }
+              : { opacity: shellOpacity }
+          }
           transition={{
-            duration: 8.2,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 8.2,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
         >
@@ -158,10 +182,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           />
         </motion.g>
         <motion.g
-          animate={{ opacity: cloudOpacity }}
+          animate={
+            preferStableMotion
+              ? { opacity: isActive ? 0.72 : 0.62 }
+              : { opacity: cloudOpacity }
+          }
           transition={{
-            duration: 4.8,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 4.8,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
         >
@@ -188,10 +216,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           strokeWidth="1.7"
           strokeLinecap="round"
           strokeDasharray="18 220"
-          animate={{ strokeDashoffset: [0, -236], opacity: [0.66, 1, 0.66] }}
+          animate={
+            preferStableMotion
+              ? { strokeDashoffset: -18, opacity: isActive ? 0.92 : 0.76 }
+              : { strokeDashoffset: [0, -236], opacity: [0.66, 1, 0.66] }
+          }
           transition={{
-            duration: 8.6,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 8.6,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "linear",
           }}
         />
@@ -203,10 +235,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           strokeWidth="1.7"
           strokeLinecap="round"
           strokeDasharray="16 260"
-          animate={{ strokeDashoffset: [0, 248], opacity: [0.55, 0.92, 0.55] }}
+          animate={
+            preferStableMotion
+              ? { strokeDashoffset: 18, opacity: isActive ? 0.84 : 0.66 }
+              : { strokeDashoffset: [0, 248], opacity: [0.55, 0.92, 0.55] }
+          }
           transition={{
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 8,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "linear",
           }}
         />
@@ -217,10 +253,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           strokeWidth="1.4"
           strokeLinecap="round"
           strokeDasharray="8 54"
-          animate={{ strokeDashoffset: [0, -62], opacity: [0.62, 1, 0.62] }}
+          animate={
+            preferStableMotion
+              ? { strokeDashoffset: -8, opacity: isActive ? 0.9 : 0.72 }
+              : { strokeDashoffset: [0, -62], opacity: [0.62, 1, 0.62] }
+          }
           transition={{
-            duration: 4.6,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 4.6,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "linear",
           }}
         />
@@ -233,10 +273,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           stroke={tone}
           strokeOpacity="0.34"
           strokeWidth="1"
-          animate={{ opacity: [0.18, 0.42, 0.18] }}
+          animate={
+            preferStableMotion
+              ? { opacity: isActive ? 0.34 : 0.24 }
+              : { opacity: [0.18, 0.42, 0.18] }
+          }
           transition={{
-            duration: 6.8,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 6.8,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
         />
@@ -246,10 +290,14 @@ export function CubeReactor({ energyColor, isActive = false }: CubeReactorProps)
           cy="120"
           r="5.8"
           fill="rgba(238,250,255,0.95)"
-          animate={{ r: [5.4, 6.8, 5.4] }}
+          animate={
+            preferStableMotion
+              ? { r: isActive ? 6.2 : 5.8 }
+              : { r: [5.4, 6.8, 5.4] }
+          }
           transition={{
-            duration: 3.2,
-            repeat: Number.POSITIVE_INFINITY,
+            duration: preferStableMotion ? 0.2 : 3.2,
+            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
         />

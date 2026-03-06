@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { PointerEvent, RefObject, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { PointerEvent, RefObject, useEffect, useState } from "react";
 
 import { siteContent } from "@/content/site";
 
@@ -39,8 +39,10 @@ export function StackSignalsCard({
   onPointerMove,
   onPointerLeave,
 }: StackSignalsCardProps) {
+  const reducedMotion = useReducedMotion();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
+  const [stableMotionMode, setStableMotionMode] = useState(false);
   const activeIndex = pinnedIndex ?? hoveredIndex;
   const activeItem =
     activeIndex !== null ? (siteContent.stackIcons[activeIndex] ?? null) : null;
@@ -51,6 +53,15 @@ export function StackSignalsCard({
   const backRoutes = coreRoutes.filter(isBackRoute);
   const frontRoutes = coreRoutes.filter((route) => !isBackRoute(route));
   const activeRouteIsBack = activeRoute ? isBackRoute(activeRoute) : false;
+  const preferStableMotion = Boolean(reducedMotion) || stableMotionMode;
+
+  useEffect(() => {
+    const ua = window.navigator.userAgent;
+    const isWindows = /\bWindows\b/i.test(ua);
+    const isChrome = /\bChrome\/\d+/i.test(ua);
+    const isOtherChromium = /\bEdg\/|\bOPR\/|\bBrave\//i.test(ua);
+    setStableMotionMode(isWindows && isChrome && !isOtherChromium);
+  }, []);
 
   return (
     <motion.div
@@ -212,32 +223,34 @@ export function StackSignalsCard({
                     }
                   />
                 ))}
-                {backRoutes.map((route, index) => (
-                  <motion.path
-                    key={`route-pulse-${route.from}`}
-                    d={route.path}
-                    fill="none"
-                    stroke="url(#coreRoutePulse)"
-                    strokeWidth="0.3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeDasharray="6 10"
-                    filter="url(#routeGlow)"
-                    animate={{
-                      strokeDashoffset: [0, -64],
-                      opacity: activeRoute
-                        ? activeRoute.from === route.from
-                          ? [0.35, 0.58, 0.88, 0.42]
-                          : [0.08, 0.15, 0.22, 0.12]
-                        : [0.22, 0.5, 0.84, 0.28],
-                    }}
-                    transition={{
-                      duration: 6.2 + (index % 4) * 0.45,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                  />
-                ))}
+                {!preferStableMotion
+                  ? backRoutes.map((route, index) => (
+                      <motion.path
+                        key={`route-pulse-${route.from}`}
+                        d={route.path}
+                        fill="none"
+                        stroke="url(#coreRoutePulse)"
+                        strokeWidth="0.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeDasharray="6 10"
+                        filter="url(#routeGlow)"
+                        animate={{
+                          strokeDashoffset: [0, -64],
+                          opacity: activeRoute
+                            ? activeRoute.from === route.from
+                              ? [0.35, 0.58, 0.88, 0.42]
+                              : [0.08, 0.15, 0.22, 0.12]
+                            : [0.22, 0.5, 0.84, 0.28],
+                        }}
+                        transition={{
+                          duration: 6.2 + (index % 4) * 0.45,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                        }}
+                      />
+                    ))
+                  : null}
                 {activeRoute && activeRouteIsBack ? (
                   <>
                     <path
@@ -319,32 +332,38 @@ export function StackSignalsCard({
             ) : null}
             <div className="absolute left-1/2 top-[57%] h-[28rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(103,232,249,0.04),rgba(59,130,246,0.025)_34%,transparent_70%)]" />
             <div className="absolute left-1/2 top-[57%] h-[18rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 [mask-image:radial-gradient(ellipse_at_center,black_36%,transparent_78%)] bg-[repeating-radial-gradient(ellipse_at_center,rgba(148,163,184,0.08)_0_1px,transparent_1px_36px)] opacity-12" />
-            <motion.div
-              className="absolute left-[51%] top-[48%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(226,246,255,0.2),rgba(125,211,252,0.08)_34%,transparent_68%)] blur-2xl"
-              animate={{
-                opacity: [0.22, 0.38, 0.22],
-                scale: [0.94, 1.03, 0.95],
-              }}
-              transition={{
-                duration: 7.5,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="absolute left-[50%] top-[50%] h-[19rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.14),transparent_62%)] blur-3xl"
-              animate={{
-                opacity: [0.08, 0.22, 0.08],
-                x: [-4, 5, -3],
-                y: [2, -3, 1],
-              }}
-              transition={{
-                duration: 11,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-            <CubeReactor energyColor={activeAccent} isActive={cubeBoost} />
+            {!preferStableMotion ? (
+              <>
+                <motion.div
+                  className="absolute left-[51%] top-[48%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(226,246,255,0.2),rgba(125,211,252,0.08)_34%,transparent_68%)] blur-2xl"
+                  animate={{
+                    opacity: [0.22, 0.38, 0.22],
+                    scale: [0.94, 1.03, 0.95],
+                  }}
+                  transition={{
+                    duration: 7.5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                />
+                <motion.div
+                  className="absolute left-[50%] top-[50%] h-[19rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.14),transparent_62%)] blur-3xl"
+                  animate={{
+                    opacity: [0.08, 0.22, 0.08],
+                    x: [-4, 5, -3],
+                    y: [2, -3, 1],
+                  }}
+                  transition={{
+                    duration: 11,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                />
+              </>
+            ) : (
+              <div className="absolute left-1/2 top-1/2 h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.12),transparent_64%)] blur-2xl" />
+            )}
+            <CubeReactor energyColor={activeAccent} isActive={cubeBoost} preferStableMotion={preferStableMotion} />
             <svg
               className="absolute inset-0 h-full w-full opacity-78"
               viewBox="0 0 100 100"
@@ -400,32 +419,34 @@ export function StackSignalsCard({
                   }
                 />
               ))}
-              {frontRoutes.map((route, index) => (
-                <motion.path
-                  key={`front-pulse-${route.from}`}
-                  d={route.path}
-                  fill="none"
-                  stroke="url(#frontRoutePulse)"
-                  strokeWidth="0.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="6 10"
-                  filter="url(#frontRouteGlow)"
-                  animate={{
-                    strokeDashoffset: [0, -64],
-                    opacity: activeRoute
-                      ? activeRoute.from === route.from
-                        ? [0.36, 0.6, 0.9, 0.42]
-                        : [0.06, 0.12, 0.18, 0.08]
-                      : [0.24, 0.52, 0.86, 0.3],
-                  }}
-                  transition={{
-                    duration: 6 + (index % 4) * 0.42,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
-                />
-              ))}
+              {!preferStableMotion
+                ? frontRoutes.map((route, index) => (
+                    <motion.path
+                      key={`front-pulse-${route.from}`}
+                      d={route.path}
+                      fill="none"
+                      stroke="url(#frontRoutePulse)"
+                      strokeWidth="0.3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="6 10"
+                      filter="url(#frontRouteGlow)"
+                      animate={{
+                        strokeDashoffset: [0, -64],
+                        opacity: activeRoute
+                          ? activeRoute.from === route.from
+                            ? [0.36, 0.6, 0.9, 0.42]
+                            : [0.06, 0.12, 0.18, 0.08]
+                          : [0.24, 0.52, 0.86, 0.3],
+                      }}
+                      transition={{
+                        duration: 6 + (index % 4) * 0.42,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
+                    />
+                  ))
+                : null}
               {activeRoute && !activeRouteIsBack ? (
                 <>
                   <path

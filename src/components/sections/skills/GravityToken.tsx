@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { MouseEvent } from "react";
+import { KeyboardEvent, PointerEvent } from "react";
 
 import { SkillGlyph } from "./SkillGlyph";
 import { PointerPosition, StackIcon } from "./types";
@@ -188,7 +188,7 @@ export function GravityToken({
 
   return (
     <motion.div
-      className="absolute left-0 top-0 hidden w-[148px] -translate-x-1/2 -translate-y-1/2 md:block lg:w-[162px] xl:w-[174px]"
+      className="absolute left-0 top-0 hidden w-[148px] -translate-x-1/2 -translate-y-1/2 transform-gpu md:block lg:w-[162px] xl:w-[174px]"
       style={{
         left: `${anchor.x}%`,
         top: `${anchor.y}%`,
@@ -198,7 +198,11 @@ export function GravityToken({
         scale: s,
         opacity: o,
         boxShadow: shadow,
+        willChange: "transform, opacity",
       }}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isPinned}
       initial={{ opacity: 0, scale: 0.92 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, amount: 0.15 }}
@@ -208,11 +212,18 @@ export function GravityToken({
         ease: [0.22, 1, 0.36, 1],
       }}
       whileHover={{ scale: reducedMotion ? 1 : 1.03, y: reducedMotion ? 0 : -1.8 }}
-      onMouseEnter={onHoverStart}
-      onMouseLeave={onHoverEnd}
-      onClick={(event: MouseEvent<HTMLDivElement>) => {
+      onPointerEnter={onHoverStart}
+      onPointerLeave={onHoverEnd}
+      onPointerDown={(event: PointerEvent<HTMLDivElement>) => {
         event.stopPropagation();
+        event.preventDefault();
         onTogglePin();
+      }}
+      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onTogglePin();
+        }
       }}
     >
       <div
