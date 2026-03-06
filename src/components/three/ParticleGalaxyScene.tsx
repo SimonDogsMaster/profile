@@ -510,6 +510,7 @@ export function ParticleGalaxyScene({
     const pointerInfluence = reducedMotion
       ? 0
       : THREE.MathUtils.clamp(pointerStrength, 0, 1);
+    const ambientSpinFactor = reducedMotion ? 0.24 : 1;
     const cameraZoom = THREE.MathUtils.clamp(
       (10 - state.camera.position.z) / 3.1,
       0,
@@ -648,9 +649,8 @@ export function ParticleGalaxyScene({
     }
 
     if (discRef.current) {
-      discRef.current.rotation.y += reducedMotion
-        ? 0
-        : (0.00056 + scrollKick * 0.00012) * frameScale;
+      discRef.current.rotation.y +=
+        (0.00056 + scrollKick * 0.00012) * frameScale * ambientSpinFactor;
       discRef.current.rotation.x = THREE.MathUtils.lerp(
         discRef.current.rotation.x,
         0.04,
@@ -659,11 +659,11 @@ export function ParticleGalaxyScene({
     }
 
     if (armsGroupRef.current) {
-      armsGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00078 * frameScale;
+      armsGroupRef.current.rotation.y += 0.00078 * frameScale * ambientSpinFactor;
     }
 
     if (dustGroupRef.current) {
-      dustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00034 * frameScale;
+      dustGroupRef.current.rotation.y += 0.00034 * frameScale * ambientSpinFactor;
       dustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         dustGroupRef.current.rotation.x,
         0.12 + Math.sin(time * 0.22) * 0.02,
@@ -672,7 +672,7 @@ export function ParticleGalaxyScene({
     }
 
     if (frontDustGroupRef.current) {
-      frontDustGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00048 * frameScale;
+      frontDustGroupRef.current.rotation.y += 0.00048 * frameScale * ambientSpinFactor;
       frontDustGroupRef.current.rotation.x = THREE.MathUtils.lerp(
         frontDustGroupRef.current.rotation.x,
         -0.1 + Math.sin(time * 0.24) * 0.03,
@@ -686,7 +686,7 @@ export function ParticleGalaxyScene({
     }
 
     if (bulgeGroupRef.current) {
-      bulgeGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00044 * frameScale;
+      bulgeGroupRef.current.rotation.y += 0.00044 * frameScale * ambientSpinFactor;
       bulgeGroupRef.current.position.z = THREE.MathUtils.lerp(
         bulgeGroupRef.current.position.z,
         Math.sin(time * 0.35) * 0.08,
@@ -695,7 +695,7 @@ export function ParticleGalaxyScene({
     }
 
     if (coreGroupRef.current) {
-      coreGroupRef.current.rotation.y += reducedMotion ? 0 : 0.00062 * frameScale;
+      coreGroupRef.current.rotation.y += 0.00062 * frameScale * ambientSpinFactor;
       coreGroupRef.current.position.z = THREE.MathUtils.lerp(
         coreGroupRef.current.position.z,
         Math.sin(time * 0.4) * 0.05,
