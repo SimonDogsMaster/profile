@@ -9,6 +9,7 @@ type ParticleGalaxySceneProps = {
   activeSection: string;
   pointer: { x: number; y: number };
   reducedMotion: boolean;
+  allowPointerInReducedMotion?: boolean;
   sectionProgress: number;
   scrollProgress: number;
   scrollVelocity: number;
@@ -397,6 +398,7 @@ export function ParticleGalaxyScene({
   activeSection,
   pointer,
   reducedMotion,
+  allowPointerInReducedMotion = false,
   sectionProgress,
   scrollProgress,
   scrollVelocity,
@@ -506,10 +508,11 @@ export function ParticleGalaxyScene({
       1,
     );
     const pointerStrength = Math.hypot(pointer.x, pointer.y);
-    const interactionActive = !reducedMotion && pointerStrength > 0.02;
-    const pointerInfluence = reducedMotion
-      ? 0
-      : THREE.MathUtils.clamp(pointerStrength, 0, 1);
+    const pointerEnabled = !reducedMotion || allowPointerInReducedMotion;
+    const interactionActive = pointerEnabled && pointerStrength > 0.02;
+    const pointerInfluence = pointerEnabled
+      ? THREE.MathUtils.clamp(pointerStrength, 0, 1)
+      : 0;
     const ambientSpinFactor = reducedMotion ? 0.24 : 1;
     const cameraZoom = THREE.MathUtils.clamp(
       (10 - state.camera.position.z) / 3.1,
@@ -537,12 +540,12 @@ export function ParticleGalaxyScene({
     if (starfieldRef.current) {
       starfieldRef.current.rotation.z = THREE.MathUtils.lerp(
         starfieldRef.current.rotation.z,
-        reducedMotion ? 0 : pointer.x * 0.05,
+        pointerEnabled ? pointer.x * 0.05 : 0,
         0.03,
       );
       starfieldRef.current.rotation.x = THREE.MathUtils.lerp(
         starfieldRef.current.rotation.x,
-        reducedMotion ? 0 : pointer.y * -0.034,
+        pointerEnabled ? pointer.y * -0.034 : 0,
         0.03,
       );
     }

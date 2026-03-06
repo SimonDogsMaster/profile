@@ -4,7 +4,7 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { useSectionWorld } from "./useSectionWorld";
 
@@ -24,8 +24,17 @@ function Loader() {
 
 export function GlobalExperienceCanvas() {
   const reducedMotion = useReducedMotion();
+  const [allowPointerInReducedMotion, setAllowPointerInReducedMotion] = useState(false);
   const world = useSectionWorld();
   const maxDpr = reducedMotion ? 1.35 : 1.6;
+
+  useEffect(() => {
+    const ua = window.navigator.userAgent;
+    const isWindows = /\bWindows\b/i.test(ua);
+    const isChrome = /\bChrome\/\d+/i.test(ua);
+    const isOtherChromium = /\bEdg\/|\bOPR\/|\bBrave\//i.test(ua);
+    setAllowPointerInReducedMotion(isWindows && isChrome && !isOtherChromium);
+  }, []);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -44,6 +53,7 @@ export function GlobalExperienceCanvas() {
             activeSection={world.activeSection}
             pointer={world.pointer}
             reducedMotion={Boolean(reducedMotion)}
+            allowPointerInReducedMotion={allowPointerInReducedMotion}
             sectionProgress={world.sectionProgress}
             scrollProgress={world.scrollProgress}
             scrollVelocity={world.scrollVelocity}
