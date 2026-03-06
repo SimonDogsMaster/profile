@@ -209,61 +209,87 @@ export function CubeReactor({
           />
         </motion.g>
 
-        <motion.path
-          d="M96 84 L160 58 L224 84 L160 110 Z"
-          fill="none"
-          stroke="rgba(234,248,255,0.92)"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-          strokeDasharray="18 220"
-          animate={
-            preferStableMotion
-              ? { strokeDashoffset: -18, opacity: isActive ? 0.92 : 0.76 }
-              : { strokeDashoffset: [0, -236], opacity: [0.66, 1, 0.66] }
-          }
-          transition={{
-            duration: preferStableMotion ? 0.2 : 8.6,
-            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        />
-        <motion.path
-          d="M96 84 L96 152 L160 178 L224 152 L224 84"
-          fill="none"
-          stroke={tone}
-          strokeOpacity="0.85"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-          strokeDasharray="16 260"
-          animate={
-            preferStableMotion
-              ? { strokeDashoffset: 18, opacity: isActive ? 0.84 : 0.66 }
-              : { strokeDashoffset: [0, 248], opacity: [0.55, 0.92, 0.55] }
-          }
-          transition={{
-            duration: preferStableMotion ? 0.2 : 8,
-            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        />
-        <motion.path
-          d="M160 110 L160 178"
-          fill="none"
-          stroke="rgba(232,247,255,0.9)"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeDasharray="8 54"
-          animate={
-            preferStableMotion
-              ? { strokeDashoffset: -8, opacity: isActive ? 0.9 : 0.72 }
-              : { strokeDashoffset: [0, -62], opacity: [0.62, 1, 0.62] }
-          }
-          transition={{
-            duration: preferStableMotion ? 0.2 : 4.6,
-            repeat: preferStableMotion ? 0 : Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        />
+        {preferStableMotion ? (
+          <>
+            <path
+              d="M96 84 L160 58 L224 84 L160 110 Z"
+              fill="none"
+              stroke="rgba(234,248,255,0.92)"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeDasharray="18 220"
+              className="cube-energy-flow-top"
+              style={{ opacity: isActive ? 0.92 : 0.76 }}
+            />
+            <path
+              d="M96 84 L96 152 L160 178 L224 152 L224 84"
+              fill="none"
+              stroke={tone}
+              strokeOpacity="0.85"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeDasharray="16 260"
+              className="cube-energy-flow-body"
+              style={{ opacity: isActive ? 0.84 : 0.66 }}
+            />
+            <path
+              d="M160 110 L160 178"
+              fill="none"
+              stroke="rgba(232,247,255,0.9)"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeDasharray="8 54"
+              className="cube-energy-flow-core"
+              style={{ opacity: isActive ? 0.9 : 0.72 }}
+            />
+          </>
+        ) : (
+          <>
+            <motion.path
+              d="M96 84 L160 58 L224 84 L160 110 Z"
+              fill="none"
+              stroke="rgba(234,248,255,0.92)"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeDasharray="18 220"
+              animate={{ strokeDashoffset: [0, -236], opacity: [0.66, 1, 0.66] }}
+              transition={{
+                duration: 8.6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.path
+              d="M96 84 L96 152 L160 178 L224 152 L224 84"
+              fill="none"
+              stroke={tone}
+              strokeOpacity="0.85"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeDasharray="16 260"
+              animate={{ strokeDashoffset: [0, 248], opacity: [0.55, 0.92, 0.55] }}
+              transition={{
+                duration: 8,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.path
+              d="M160 110 L160 178"
+              fill="none"
+              stroke="rgba(232,247,255,0.9)"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeDasharray="8 54"
+              animate={{ strokeDashoffset: [0, -62], opacity: [0.62, 1, 0.62] }}
+              transition={{
+                duration: 4.6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          </>
+        )}
         <motion.ellipse
           cx="160"
           cy="124"

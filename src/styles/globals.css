@@ -261,6 +261,18 @@ textarea {
   animation-iteration-count: infinite;
 }
 
+.cube-energy-flow-top {
+  animation: cube-energy-flow-top 8.6s linear infinite;
+}
+
+.cube-energy-flow-body {
+  animation: cube-energy-flow-body 8s linear infinite;
+}
+
+.cube-energy-flow-core {
+  animation: cube-energy-flow-core 4.6s linear infinite;
+}
+
 @keyframes stack-route-flow {
   from {
     stroke-dashoffset: 0;
@@ -276,6 +288,33 @@ textarea {
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cube-energy-flow-top {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -236;
+  }
+}
+
+@keyframes cube-energy-flow-body {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 248;
+  }
+}
+
+@keyframes cube-energy-flow-core {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -62;
   }
 }
 
@@ -302,5 +341,24 @@ textarea {
     animation-duration: var(--stack-route-active-duration, 1.95s) !important;
     animation-iteration-count: infinite !important;
     animation-timing-function: linear !important;
+  }
+
+  .cube-energy-flow-top,
+  .cube-energy-flow-body,
+  .cube-energy-flow-core {
+    animation-iteration-count: infinite !important;
+    animation-timing-function: linear !important;
+  }
+
+  .cube-energy-flow-top {
+    animation-duration: 8.6s !important;
+  }
+
+  .cube-energy-flow-body {
+    animation-duration: 8s !important;
+  }
+
+  .cube-energy-flow-core {
+    animation-duration: 4.6s !important;
   }
 }
