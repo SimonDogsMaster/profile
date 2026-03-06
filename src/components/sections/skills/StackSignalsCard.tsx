@@ -223,34 +223,38 @@ export function StackSignalsCard({
                     }
                   />
                 ))}
-                {!preferStableMotion
-                  ? backRoutes.map((route, index) => (
-                      <motion.path
-                        key={`route-pulse-${route.from}`}
-                        d={route.path}
-                        fill="none"
-                        stroke="url(#coreRoutePulse)"
-                        strokeWidth="0.3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeDasharray="6 10"
-                        filter="url(#routeGlow)"
-                        animate={{
-                          strokeDashoffset: [0, -64],
-                          opacity: activeRoute
-                            ? activeRoute.from === route.from
-                              ? [0.35, 0.58, 0.88, 0.42]
-                              : [0.08, 0.15, 0.22, 0.12]
-                            : [0.22, 0.5, 0.84, 0.28],
-                        }}
-                        transition={{
-                          duration: 6.2 + (index % 4) * 0.45,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "linear",
-                        }}
-                      />
-                    ))
-                  : null}
+                {backRoutes.map((route, index) => (
+                  <motion.path
+                    key={`route-pulse-${route.from}`}
+                    d={route.path}
+                    fill="none"
+                    stroke="url(#coreRoutePulse)"
+                    strokeWidth={preferStableMotion ? 0.26 : 0.3}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeDasharray={preferStableMotion ? "5 12" : "6 10"}
+                    filter={preferStableMotion ? undefined : "url(#routeGlow)"}
+                    animate={{
+                      strokeDashoffset: preferStableMotion ? [0, -42] : [0, -64],
+                      opacity: activeRoute
+                        ? activeRoute.from === route.from
+                          ? preferStableMotion
+                            ? [0.26, 0.52, 0.3]
+                            : [0.35, 0.58, 0.88, 0.42]
+                          : preferStableMotion
+                            ? [0.03, 0.08, 0.04]
+                            : [0.08, 0.15, 0.22, 0.12]
+                        : preferStableMotion
+                          ? [0.12, 0.34, 0.16]
+                          : [0.22, 0.5, 0.84, 0.28],
+                    }}
+                    transition={{
+                      duration: (preferStableMotion ? 8.2 : 6.2) + (index % 4) * 0.45,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    }}
+                  />
+                ))}
                 {activeRoute && activeRouteIsBack ? (
                   <>
                     <path
@@ -419,34 +423,38 @@ export function StackSignalsCard({
                   }
                 />
               ))}
-              {!preferStableMotion
-                ? frontRoutes.map((route, index) => (
-                    <motion.path
-                      key={`front-pulse-${route.from}`}
-                      d={route.path}
-                      fill="none"
-                      stroke="url(#frontRoutePulse)"
-                      strokeWidth="0.3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeDasharray="6 10"
-                      filter="url(#frontRouteGlow)"
-                      animate={{
-                        strokeDashoffset: [0, -64],
-                        opacity: activeRoute
-                          ? activeRoute.from === route.from
-                            ? [0.36, 0.6, 0.9, 0.42]
-                            : [0.06, 0.12, 0.18, 0.08]
-                          : [0.24, 0.52, 0.86, 0.3],
-                      }}
-                      transition={{
-                        duration: 6 + (index % 4) * 0.42,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    />
-                  ))
-                : null}
+              {frontRoutes.map((route, index) => (
+                <motion.path
+                  key={`front-pulse-${route.from}`}
+                  d={route.path}
+                  fill="none"
+                  stroke="url(#frontRoutePulse)"
+                  strokeWidth={preferStableMotion ? 0.26 : 0.3}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={preferStableMotion ? "5 12" : "6 10"}
+                  filter={preferStableMotion ? undefined : "url(#frontRouteGlow)"}
+                  animate={{
+                    strokeDashoffset: preferStableMotion ? [0, -42] : [0, -64],
+                    opacity: activeRoute
+                      ? activeRoute.from === route.from
+                        ? preferStableMotion
+                          ? [0.28, 0.54, 0.32]
+                          : [0.36, 0.6, 0.9, 0.42]
+                        : preferStableMotion
+                          ? [0.03, 0.08, 0.04]
+                          : [0.06, 0.12, 0.18, 0.08]
+                      : preferStableMotion
+                        ? [0.13, 0.35, 0.16]
+                        : [0.24, 0.52, 0.86, 0.3],
+                  }}
+                  transition={{
+                    duration: (preferStableMotion ? 8 : 6) + (index % 4) * 0.42,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "linear",
+                  }}
+                />
+              ))}
               {activeRoute && !activeRouteIsBack ? (
                 <>
                   <path
