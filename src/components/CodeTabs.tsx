@@ -501,7 +501,7 @@ export function CodeTabs() {
       className="relative z-20 mx-auto w-full max-w-[92vw] sm:max-w-[88vw] xl:max-w-[720px] 2xl:max-w-[780px]"
     >
       <div className="overflow-hidden rounded-[24px] border border-white/8 bg-[#0a0f21]/90 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:rounded-[30px] sm:shadow-[0_32px_110px_rgba(0,0,0,0.32)]">
-        <div className="flex flex-wrap items-center gap-2 border-b border-white/8 bg-[#0d1328]/96 px-3 py-3 sm:gap-3 sm:px-6">
+        <div className="flex items-center gap-2 border-b border-white/8 bg-[#0d1328]/96 px-3 py-3 sm:gap-3 sm:px-6">
           <div className="mr-1 flex items-center gap-2 sm:mr-2">
             <span className="size-3 rounded-full bg-[#ff7f67]" />
             <span className="size-3 rounded-full bg-[#f2d05e]" />
@@ -509,39 +509,41 @@ export function CodeTabs() {
           </div>
 
           <LayoutGroup id="hero-code-tabs">
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              {files.map((file, index) => {
-                const active = index === activeTab;
+            <div className="min-w-0 flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex w-max items-center gap-1 pr-1 sm:w-auto sm:pr-0">
+                {files.map((file, index) => {
+                  const active = index === activeTab;
 
-                return (
-                  <button
-                    key={file.label}
-                    type="button"
-                    onClick={() => setActiveTab(index)}
-                    className="group relative rounded-t-xl px-3 py-2 text-[13px] font-medium text-[#6f7b9f] transition duration-200 hover:text-[#dbe6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 sm:rounded-t-2xl sm:px-5 sm:py-2.5 sm:text-sm"
-                  >
-                    {active ? (
-                      <motion.span
-                        layoutId="active-code-tab"
-                        className="absolute inset-0 rounded-t-xl border border-b-0 border-cyan-300/18 bg-[#182042] sm:rounded-t-2xl"
-                        transition={{
-                          type: "spring",
-                          stiffness: 360,
-                          damping: 30,
-                        }}
-                      />
-                    ) : null}
-                    {!active ? (
-                      <span className="absolute inset-x-2 bottom-0 h-px bg-transparent transition duration-200 group-hover:bg-cyan-300/20" />
-                    ) : null}
-                    <span
-                      className={`relative z-10 ${active ? "text-[#dce6ff]" : ""}`}
+                  return (
+                    <button
+                      key={file.label}
+                      type="button"
+                      onClick={() => setActiveTab(index)}
+                      className="group relative shrink-0 whitespace-nowrap rounded-t-xl px-3 py-2 text-[13px] font-medium text-[#6f7b9f] transition duration-200 hover:text-[#dbe6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 sm:rounded-t-2xl sm:px-5 sm:py-2.5 sm:text-sm"
                     >
-                      {file.label}
-                    </span>
-                  </button>
-                );
-              })}
+                      {active ? (
+                        <motion.span
+                          layoutId="active-code-tab"
+                          className="absolute inset-0 rounded-t-xl border border-b-0 border-cyan-300/18 bg-[#182042] sm:rounded-t-2xl"
+                          transition={{
+                            type: "spring",
+                            stiffness: 360,
+                            damping: 30,
+                          }}
+                        />
+                      ) : null}
+                      {!active ? (
+                        <span className="absolute inset-x-2 bottom-0 h-px bg-transparent transition duration-200 group-hover:bg-cyan-300/20" />
+                      ) : null}
+                      <span
+                        className={`relative z-10 ${active ? "text-[#dce6ff]" : ""}`}
+                      >
+                        {file.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </LayoutGroup>
         </div>

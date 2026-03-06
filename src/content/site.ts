@@ -175,20 +175,27 @@ export const siteContent = {
   projects: [
     {
       slug: "signal-os",
-      title: "Signal OS",
+      title: "Admin Platform Kit",
       eyebrow: "Product Platform",
       year: "2026",
-      roleLabel: "Lead UI Architecture",
+      roleLabel: "Lead Front-end Architecture",
       description:
-        "A modular analytics workspace for product teams, combining monitoring, onboarding funnels, and collaborative insights in a single interface system.",
+        "A multi-role admin starter built on Next.js 16 App Router with locale routing, dashboard shell, reusable data tables, and role-aware access states.",
       longDescription:
-        "I led the front-end architecture and motion language for the platform redesign. The result was a faster dashboard shell, clearer interaction patterns, and a component system used across growth, billing, and reporting surfaces.",
-      tags: ["Next.js", "TypeScript", "Motion", "Dashboard"],
-      impact: "Platform redesign with measurable adoption and performance gains.",
-      metrics: ["-31% bundle cost", "+18% trial activation", "95 Lighthouse"],
+        "I designed and implemented a production-ready admin foundation with locale-prefixed routing (/en, /th, /lo), role switching for admin/manager/staff/partner, and a token-driven theme layer that stays aligned with shadcn/ui. The platform includes DataTable patterns, RHF + zod form workflows, mock RBAC + users CRUD APIs, and modular admin surfaces for dashboard, users, roles, audit logs, notifications, and settings.",
+      images: [
+        "/image-snex-theme/1.png",
+        "/image-snex-theme/2.png",
+        "/image-snex-theme/3.png",
+        "/image-snex-theme/4.png",
+        "/image-snex-theme/5.png"
+      ],
+      tags: ["Next.js 16", "TypeScript", "shadcn/ui", "TanStack Table", "RHF + zod", "RBAC"],
+      impact: "Delivered a reusable admin baseline that accelerates feature delivery while keeping access control, locale behavior, and visual consistency stable across modules.",
+      metrics: ["Locales: en / th / lo", "Roles: admin / manager / staff / partner", "Modules: dashboard, users, roles, audit, notifications, settings"],
       links: [
         { label: "Repository", href: "https://gitlab.com/simonr1verman/simon-s" },
-        { label: "Contact About This Work", href: "mailto:simon.r1verman@gmail.com?subject=Signal%20OS%20Case%20Study" }
+        { label: "Request Admin Platform Walkthrough", href: "mailto:simon.r1verman@gmail.com?subject=Admin%20Platform%20Kit%20Walkthrough" }
       ]
     },
     {
@@ -201,6 +208,7 @@ export const siteContent = {
         "A commerce launch site with editorial pacing, layered product reveals, and a scroll system tuned for storytelling without losing speed.",
       longDescription:
         "The site used layered depth, subtle visual accents, and a lightweight motion system to support a major launch. The focus was a high-end feel with strict performance budgets across regions and devices.",
+      images: [],
       tags: ["R3F", "Framer Motion", "Tailwind", "Storytelling"],
       impact: "Launch storytelling balanced against strict speed budgets on every device.",
       metrics: ["2.4s LCP", "60fps mobile hero", "+23% conversion"],
@@ -219,6 +227,7 @@ export const siteContent = {
         "A developer-first docs and sandbox hub that turns complex APIs into guided learning flows with stronger navigation and faster search.",
       longDescription:
         "I rebuilt the information architecture, page templates, and code interaction layer to reduce cognitive load. The system improved discoverability and made product adoption more self-serve.",
+      images: [],
       tags: ["Docs", "Search UX", "MDX", "Developer Tools"],
       impact: "Documentation surfaces redesigned to reduce friction and improve self-serve adoption.",
       metrics: ["-42% bounce", "+29% docs completion", "AA compliant"],
