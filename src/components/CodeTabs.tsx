@@ -316,8 +316,9 @@ const files: CodeFile[] = [
 
 const EDITOR_ROWS = Math.max(...files.map((file) => file.lines.length));
 
-function useTypingCode(file: CodeFile) {
+function useTypingCode(file: CodeFile, forceTypingInReducedMotion: boolean) {
   const reduceMotion = useReducedMotion();
+  const reduceTypingMotion = reduceMotion && !forceTypingInReducedMotion;
   const linesSource = file.lines;
   const totalCharacters = useMemo(
     () =>
@@ -326,17 +327,17 @@ function useTypingCode(file: CodeFile) {
     [linesSource],
   );
   const [visibleCharacters, setVisibleCharacters] = useState(
-    reduceMotion ? totalCharacters : 0,
+    reduceTypingMotion ? totalCharacters : 0,
   );
   const [cursorVisible, setCursorVisible] = useState(true);
 
   useEffect(() => {
-    setVisibleCharacters(reduceMotion ? totalCharacters : 0);
+    setVisibleCharacters(reduceTypingMotion ? totalCharacters : 0);
     setCursorVisible(true);
-  }, [linesSource, reduceMotion, totalCharacters]);
+  }, [linesSource, reduceTypingMotion, totalCharacters]);
 
   useEffect(() => {
-    if (reduceMotion) {
+    if (reduceTypingMotion) {
       return;
     }
 
@@ -409,7 +410,7 @@ function useTypingCode(file: CodeFile) {
     file.cadence.punctuation,
     file.cadence.reset,
     linesSource,
-    reduceMotion,
+    reduceTypingMotion,
     totalCharacters,
     visibleCharacters,
   ]);
@@ -474,13 +475,23 @@ function useTypingCode(file: CodeFile) {
 
 export function CodeTabs() {
   const reduceMotion = useReducedMotion();
+  const [forceTypingInReducedMotion, setForceTypingInReducedMotion] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const activeFile = files[activeTab];
+  const reduceTypingMotion = reduceMotion && !forceTypingInReducedMotion;
   const { activeLine, cursorColumn, cursorVisible, isComplete, lines } =
-    useTypingCode(activeFile);
+    useTypingCode(activeFile, forceTypingInReducedMotion);
 
   useEffect(() => {
-    if (reduceMotion || !isComplete) {
+    const ua = window.navigator.userAgent;
+    const isWindows = /\bWindows\b/i.test(ua);
+    const isChrome = /\bChrome\/\d+/i.test(ua);
+    const isOtherChromium = /\bEdg\/|\bOPR\/|\bBrave\//i.test(ua);
+    setForceTypingInReducedMotion(isWindows && isChrome && !isOtherChromium);
+  }, []);
+
+  useEffect(() => {
+    if (reduceTypingMotion || !isComplete) {
       return;
     }
 
@@ -491,7 +502,7 @@ export function CodeTabs() {
     return () => {
       window.clearTimeout(switchTimeout);
     };
-  }, [activeFile.cadence.reset, isComplete, reduceMotion]);
+  }, [activeFile.cadence.reset, isComplete, reduceTypingMotion]);
 
   return (
     <motion.div
