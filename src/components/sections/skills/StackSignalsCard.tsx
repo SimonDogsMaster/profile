@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { type CSSProperties, PointerEvent, RefObject, useEffect, useState } from "react";
+import { type CSSProperties, PointerEvent, RefObject, useEffect, useRef, useState } from "react";
 
 import { siteContent } from "@/content/site";
 
@@ -26,6 +26,13 @@ const coreRoutes = [
   { from: 12, path: "M92 72 L82 72 L82 64 L68 64 L68 58 L54.8 57.3", to: { x: 54.8, y: 57.3 } },
 ] as const;
 
+const isBackRoute = (route: (typeof coreRoutes)[number]) => route.to.y >= 57;
+const backRoutes = coreRoutes.filter(isBackRoute);
+const frontRoutes = coreRoutes.filter((route) => !isBackRoute(route));
+const routeByIndex = new Map<number, (typeof coreRoutes)[number]>(
+  coreRoutes.map((route) => [route.from, route]),
+);
+
 type StackSignalsCardProps = {
   fieldRef: RefObject<HTMLDivElement | null>;
   pointer: PointerPosition;
@@ -43,15 +50,13 @@ export function StackSignalsCard({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
   const [stableMotionMode, setStableMotionMode] = useState(false);
+  const pointerRef = useRef<PointerPosition>(pointer);
   const activeIndex = pinnedIndex ?? hoveredIndex;
   const activeItem =
     activeIndex !== null ? (siteContent.stackIcons[activeIndex] ?? null) : null;
   const activeAccent = activeItem?.accent ?? null;
-  const activeRoute = coreRoutes.find((route) => route.from === activeIndex);
+  const activeRoute = activeIndex !== null ? routeByIndex.get(activeIndex) ?? null : null;
   const cubeBoost = activeIndex !== null;
-  const isBackRoute = (route: (typeof coreRoutes)[number]) => route.to.y >= 57;
-  const backRoutes = coreRoutes.filter(isBackRoute);
-  const frontRoutes = coreRoutes.filter((route) => !isBackRoute(route));
   const activeRouteIsBack = activeRoute ? isBackRoute(activeRoute) : false;
   const preferStableMotion = Boolean(reducedMotion) || stableMotionMode;
 
@@ -62,6 +67,10 @@ export function StackSignalsCard({
     const isOtherChromium = /\bEdg\/|\bOPR\/|\bBrave\//i.test(ua);
     setStableMotionMode(isWindows && isChrome && !isOtherChromium);
   }, []);
+
+  useEffect(() => {
+    pointerRef.current = pointer;
+  }, [pointer]);
 
   return (
     <motion.div
@@ -374,7 +383,9 @@ export function StackSignalsCard({
             {!preferStableMotion ? (
               <>
                 <motion.div
-                  className="absolute left-[51%] top-[48%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(226,246,255,0.2),rgba(125,211,252,0.08)_34%,transparent_68%)] blur-2xl"
+                  className={`absolute left-[51%] top-[48%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(226,246,255,0.2),rgba(125,211,252,0.08)_34%,transparent_68%)] ${
+                    preferStableMotion ? "blur-xl" : "blur-2xl"
+                  }`}
                   animate={{
                     opacity: [0.22, 0.38, 0.22],
                     scale: [0.94, 1.03, 0.95],
@@ -386,7 +397,9 @@ export function StackSignalsCard({
                   }}
                 />
                 <motion.div
-                  className="absolute left-[50%] top-[50%] h-[19rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.14),transparent_62%)] blur-3xl"
+                  className={`absolute left-[50%] top-[50%] h-[19rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.14),transparent_62%)] ${
+                    preferStableMotion ? "blur-2xl" : "blur-3xl"
+                  }`}
                   animate={{
                     opacity: [0.08, 0.22, 0.08],
                     x: [-4, 5, -3],
@@ -400,7 +413,7 @@ export function StackSignalsCard({
                 />
               </>
             ) : (
-              <div className="absolute left-1/2 top-1/2 h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.12),transparent_64%)] blur-2xl" />
+              <div className="absolute left-1/2 top-1/2 h-[20rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(170,228,255,0.12),transparent_64%)] blur-xl" />
             )}
             <CubeReactor energyColor={activeAccent} isActive={cubeBoost} preferStableMotion={preferStableMotion} />
             <svg
@@ -585,7 +598,7 @@ export function StackSignalsCard({
               item={item}
               index={index}
               anchor={gravityAnchors[index]}
-              pointer={pointer}
+              pointerRef={pointerRef}
               isActive={activeIndex === index}
               isPinned={pinnedIndex === index}
               forceInteractiveMotion={stableMotionMode}

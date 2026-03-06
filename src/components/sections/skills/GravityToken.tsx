@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { KeyboardEvent, PointerEvent } from "react";
+import { KeyboardEvent, PointerEvent, RefObject, memo, useRef } from "react";
 
 import { SkillGlyph } from "./SkillGlyph";
 import { PointerPosition, StackIcon } from "./types";
@@ -35,7 +35,7 @@ type GravityTokenProps = {
   item: StackIcon;
   index: number;
   anchor: { x: number; y: number };
-  pointer: PointerPosition;
+  pointerRef: RefObject<PointerPosition>;
   isActive: boolean;
   isPinned: boolean;
   forceInteractiveMotion?: boolean;
@@ -44,11 +44,11 @@ type GravityTokenProps = {
   onTogglePin: () => void;
 };
 
-export function GravityToken({
+function GravityTokenComponent({
   item,
   index,
   anchor,
-  pointer,
+  pointerRef,
   isActive,
   isPinned,
   forceInteractiveMotion = false,
@@ -68,6 +68,7 @@ export function GravityToken({
   const r = useSpring(rotate, { stiffness: 96, damping: 22, mass: 0.66 });
   const s = useSpring(scale, { stiffness: 156, damping: 22, mass: 0.58 });
   const o = useSpring(opacity, { stiffness: 118, damping: 24, mass: 0.64 });
+  const lastFrameTime = useRef(0);
   const shadow = useTransform(
     s,
     [1, 1.08],
@@ -75,6 +76,15 @@ export function GravityToken({
   );
 
   useAnimationFrame((time) => {
+    const pointer = pointerRef.current;
+    const highPriority = Boolean(pointer) || isActive || isPinned;
+    const minFrameGap = highPriority ? 16 : 28;
+
+    if (time - lastFrameTime.current < minFrameGap) {
+      return;
+    }
+    lastFrameTime.current = time;
+
     const depth = gravityDepths[index] ?? 1;
     const isTopOrbit = index <= 3;
 
@@ -122,6 +132,16 @@ export function GravityToken({
       const distance = Math.hypot(deltaX, deltaY);
       const gravityRadius = 25;
       const attraction = Math.max(0, 1 - distance / gravityRadius);
+
+      if (attraction <= 0.001) {
+        translateX.set(targetX);
+        translateY.set(targetY);
+        rotate.set(targetRotate);
+        scale.set(targetScale);
+        opacity.set(targetOpacity);
+        return;
+      }
+
       targetX += deltaX * attraction * (0.34 + depth * 0.12) * tailDamping;
       targetY += deltaY * attraction * (0.2 + depth * 0.1) * tailDamping;
       targetRotate += deltaX * attraction * 0.045;
@@ -150,10 +170,15 @@ export function GravityToken({
           continue;
         }
 
-        const sharedPull = Math.max(
-          0,
-          1 - Math.hypot(pointer.x - neighbor.x, pointer.y - neighbor.y) / 28,
+        const pointerToNeighborDistance = Math.hypot(
+          pointer.x - neighbor.x,
+          pointer.y - neighbor.y,
         );
+        if (pointerToNeighborDistance > 28) {
+          continue;
+        }
+
+        const sharedPull = Math.max(0, 1 - pointerToNeighborDistance / 28);
 
         if (sharedPull <= 0) {
           continue;
@@ -320,3 +345,15 @@ export function GravityToken({
     </motion.div>
   );
 }
+
+export const GravityToken = memo(
+  GravityTokenComponent,
+  (prev, next) =>
+    prev.index === next.index &&
+    prev.item === next.item &&
+    prev.anchor === next.anchor &&
+    prev.pointerRef === next.pointerRef &&
+    prev.isActive === next.isActive &&
+    prev.isPinned === next.isPinned &&
+    prev.forceInteractiveMotion === next.forceInteractiveMotion,
+);
