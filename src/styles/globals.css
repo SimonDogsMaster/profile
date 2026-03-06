@@ -247,6 +247,32 @@ textarea {
   color: var(--muted);
 }
 
+.stack-route-flow {
+  animation-name: stack-route-flow, stack-route-fade;
+  animation-duration: 8s, 3.4s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes stack-route-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -42;
+  }
+}
+
+@keyframes stack-route-fade {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
